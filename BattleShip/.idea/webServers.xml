@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="232e247c-00ea-4da5-b0af-da27b42d6819" name="MVunipi" url="http://172.18.0.46:8080">
+        <fileTransfer rootFolder="/root" accessType="SFTP" host="172.18.0.46" port="22" sshConfigId="ca557c00-a8cc-41c3-983a-169ca6a6eafd" sshConfig="root@172.18.0.46:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
