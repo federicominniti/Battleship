@@ -65,16 +65,18 @@ public class LevelDBDriver {
         db.delete(bytes(key));
     }
 
-    public void addUser(String username, String email, String password) {
+    public User addUser(String username, String email, String password) {
         String buildString = "username:";
         buildString += username;
         buildString += ":";
 
         put(buildString + "email", email);
         put(buildString + "password", password);
+        User res = new User(username, password, email, 0, 0);
+        return res;
     }
 
-    public boolean checkIfUserExists(String username) {
+    public boolean checkIfUserExists(String username, String email) {
         String check = get("username:" + username + ":password");
         return (check != null);
     }
