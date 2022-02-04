@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BattleShip</title>
     <!--link href="resources/css/style.css" rel="stylesheet" type="text/css"-->
-    <link rel="icon" type="image/png" href="resources/images/battleShip_icon.png"/>
+    <link rel="icon" type="image/png" href="./images/battleship_icon.png"/>
 </head>
 <body>
 
@@ -42,6 +42,6 @@
             </div>
         </form>
     </div>
-    <script type="text/javascript" src="./../resources/javascript/index.js"></script>
+    <script type="text/javascript" src="./javascript/index.js"></script>
 </body>
 </html>
