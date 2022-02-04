@@ -76,7 +76,7 @@ public class LevelDBDriver {
         return res;
     }
 
-    public boolean checkIfUserExists(String username, String email) {
+    public boolean checkIfUserExists(String username) {
         String check = get("username:" + username + ":password");
         return (check != null);
     }
@@ -104,7 +104,6 @@ public class LevelDBDriver {
             return loggedUser;
         }
         return null;
-
     }
 
 
