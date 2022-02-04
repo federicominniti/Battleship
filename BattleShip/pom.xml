@@ -50,6 +50,13 @@
       <artifactId>jinterface</artifactId>
       <version>1.6.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+    <dependency>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
+      <version>1.4.19</version>
+    </dependency>
+
   </dependencies>
 
   <build>

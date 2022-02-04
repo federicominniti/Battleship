@@ -104,7 +104,6 @@ public class LevelDBDriver {
             return loggedUser;
         }
         return null;
-
     }
 
 
