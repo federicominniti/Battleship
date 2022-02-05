@@ -24,17 +24,22 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = levelDBDriver.login(username, password);
+
+        String targetJSP = null;
         if (user == null) {
             String message = "Wrong username or password.";
             request.setAttribute("msg", message);
-            String targetJSP = request.getContextPath() + "/index.jsp";
+            targetJSP = "/index.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
             requestDispatcher.forward(request, response);
         } else {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             session.setAttribute("logged", user);
-            String targetJSP = request.getContextPath() + "./pages/homepage.jsp";
-            response.sendRedirect(targetJSP);
+            request.setAttribute("user", user);
+            targetJSP = "/pages/homepage.jsp";
         }
+
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
+        requestDispatcher.forward(request, response);
     }
 }
