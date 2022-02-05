@@ -29,15 +29,13 @@ public class LoginServlet extends HttpServlet {
         if (user == null) {
             String message = "Wrong username or password.";
             request.setAttribute("msg", message);
-            String targetJSP = request.getContextPath() + "/index.jsp";
+            String targetJSP = "/index.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
             requestDispatcher.forward(request, response);
         } else {
-            HttpSession session = request.getSession(true);
-            if (session.getAttribute("logged") == null) {
-                session.setAttribute("logged", user);
-            }
-            String targetJSP = request.getContextPath() + "/pages/homepage.jsp";
+            HttpSession session = request.getSession();
+            session.setAttribute("logged", user);
+            String targetJSP = "./pages/homepage.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
             requestDispatcher.forward(request, response);
         }

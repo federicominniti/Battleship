@@ -24,6 +24,7 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+
         if (levelDBDriver.checkIfUserExists(username)) {
             String message = "Username already in use.";
             request.setAttribute("msg", message);
@@ -32,10 +33,9 @@ public class RegisterServlet extends HttpServlet {
             requestDispatcher.forward(request, response);
         } else {
             User user  = levelDBDriver.addUser(username, email, password);
-            HttpSession session = request.getSession(true);
-            if (session.getAttribute("logged") == null) {
-                session.setAttribute("logged", username);
-            }
+            HttpSession session = request.getSession();
+            session.setAttribute("logged", user);
+            System.out.println(user.getUsername());
             String targetJSP = "./pages/homepage.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
             requestDispatcher.forward(request, response);
