@@ -7,7 +7,7 @@
 <body>
 <%
     if (session.getAttribute("logged") == null) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        response.sendRedirect("../index.jsp");
     }
     User user = (User) request.getAttribute("logged");
 %>

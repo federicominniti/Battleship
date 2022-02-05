@@ -36,7 +36,7 @@ public class RegisterServlet extends HttpServlet {
             if (session.getAttribute("logged") == null) {
                 session.setAttribute("logged", username);
             }
-            String targetJSP = request.getContextPath() + "/pages/homepage.jsp";
+            String targetJSP = "./pages/homepage.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
             requestDispatcher.forward(request, response);
         }
