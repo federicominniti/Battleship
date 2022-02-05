@@ -29,11 +29,11 @@ public class LevelDBDriver {
         return instance;
     }
 
-    private static DB openDB() {
+    private DB openDB() {
         Options options = new Options();
         options.createIfMissing(true);
 
-        DB db = null;
+        db = null;
         try {
             db = factory.open(new File(dbPath), options);
         } catch (IOException e) {
