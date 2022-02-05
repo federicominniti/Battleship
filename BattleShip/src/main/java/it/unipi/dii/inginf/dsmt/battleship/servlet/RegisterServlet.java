@@ -11,8 +11,6 @@ import java.io.IOException;
 @WebServlet(name = "RegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
 
-    LevelDBDriver levelDBDriver = LevelDBDriver.getInstance();
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -20,10 +18,11 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LevelDBDriver levelDBDriver = LevelDBDriver.getInstance();
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        if (levelDBDriver.checkIfUserExists(username) == false) {
+        if (levelDBDriver.checkIfUserExists(username)) {
             String message = "Username already in use.";
             request.setAttribute("msg", message);
             String targetJSP = request.getContextPath() + "/index.jsp";
