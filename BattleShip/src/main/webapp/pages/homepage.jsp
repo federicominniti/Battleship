@@ -10,11 +10,13 @@
     if (session.getAttribute("logged") == null) {
         response.sendRedirect("../index.jsp");
     }
-    User user = (User) request.getAttribute("user");
+    User user = (User) session.getAttribute("logged");
 %>
     <h1>
         Welcome <%=user.getUsername()%>
     </h1>
+    <a href="/logout" >Log-out</a>
+
 
 </body>
 </html>

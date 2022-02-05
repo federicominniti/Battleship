@@ -28,15 +28,16 @@ public class RegisterServlet extends HttpServlet {
         String targetJSP = null;
         if (levelDBDriver.checkIfUserExists(username)) {
             String message = "Username already in use.";
-            request.setAttribute("msg", message);
-            targetJSP = "/index.jsp";
+            //request.setAttribute("msg", message);
+            targetJSP = "/index.jsp?msg="+message;
         } else {
             User user  = levelDBDriver.addUser(username, email, password);
             HttpSession session = request.getSession(true);
             session.setAttribute("logged", user);
-            request.setAttribute("user", user);
+            //request.setAttribute("user", user);
             targetJSP = "/pages/homepage.jsp";
         }
-        request.getRequestDispatcher(targetJSP).forward(request, response);
+        //request.getRequestDispatcher(targetJSP).forward(request, response);
+        response.sendRedirect(request.getContextPath() + targetJSP);
     }
 }
