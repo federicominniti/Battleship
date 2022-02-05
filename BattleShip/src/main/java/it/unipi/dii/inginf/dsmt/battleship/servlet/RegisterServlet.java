@@ -33,9 +33,9 @@ public class RegisterServlet extends HttpServlet {
             requestDispatcher.forward(request, response);
         } else {
             User user  = levelDBDriver.addUser(username, email, password);
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             session.setAttribute("logged", user);
-            System.out.println(user.getUsername());
+            System.out.println((User)session.getAttribute("logged"));
             String targetJSP = "./pages/homepage.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
             requestDispatcher.forward(request, response);
