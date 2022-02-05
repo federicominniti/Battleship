@@ -16,7 +16,7 @@ public class LevelDBDriver {
 
     private LevelDBDriver(String dbPath) {
         this.dbPath = dbPath;
-        db = openDB();
+        openDB();
     }
 
     public static LevelDBDriver getInstance() {
@@ -29,7 +29,7 @@ public class LevelDBDriver {
         return instance;
     }
 
-    private DB openDB() {
+    private void openDB() {
         Options options = new Options();
         options.createIfMissing(true);
 
@@ -37,9 +37,8 @@ public class LevelDBDriver {
         try {
             db = factory.open(new File(dbPath), options);
         } catch (IOException e) {
-            e.printStackTrace();
+            closeDB();
         }
-        return db;
     }
 
     public void closeDB() {
