@@ -8,6 +8,11 @@
     <link rel="icon" type="image/png" href="images/battleship_icon.png"/>
 </head>
 <body>
+<%
+    if (session.getAttribute("logged") != null) {
+        response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
+    }
+%>
     <h1>BattleShip!</h1>
 
     <div>
