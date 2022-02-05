@@ -11,12 +11,12 @@ import static org.iq80.leveldb.impl.Iq80DBFactory.*;
 public class LevelDBDriver {
     private static volatile LevelDBDriver instance;
     private DB db;
-    private static String dbPath;
+    private String dbPath;
 
 
     private LevelDBDriver(String dbPath) {
         this.dbPath = dbPath;
-        openDB();
+        db = openDB();
     }
 
     public static LevelDBDriver getInstance() {
