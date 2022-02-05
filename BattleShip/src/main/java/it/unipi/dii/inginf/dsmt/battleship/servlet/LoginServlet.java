@@ -11,7 +11,7 @@ import java.io.IOException;
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
-    LevelDBDriver levelDBDriver = LevelDBDriver.getInstance();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -22,6 +22,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LevelDBDriver levelDBDriver = LevelDBDriver.getInstance();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         User user = levelDBDriver.login(username, password);
