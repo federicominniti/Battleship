@@ -35,9 +35,11 @@
                 <label>Repeat password</label>
                 <input type="password" placeholder="Repeat Password" id = "repeat_password" name="repeat_password"
                        onblur="checkPasswordEquality('password', 'repeat_password')" required><br>
-
                 <button type="submit" name="registerButton" value="register" id = "register"
                         ononmousedown = "highlightsFieldsOrGo()" disabled>Register</button>
+                <% if (request.getAttribute("msg") == null) { %>
+                    <p class="error-msg"><%=request.getAttribute("msg")%></p>
+                <% } %>
             </div>
 
         </form>

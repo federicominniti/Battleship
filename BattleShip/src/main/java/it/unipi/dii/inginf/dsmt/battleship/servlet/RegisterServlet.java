@@ -24,6 +24,7 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+
         String targetJSP = null;
         if (levelDBDriver.checkIfUserExists(username)) {
             String message = "Username already in use.";
