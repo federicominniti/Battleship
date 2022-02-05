@@ -39,6 +39,7 @@
                 <button type="submit" name="registerButton" value="register" id = "register"
                         ononmousedown = "highlightsFieldsOrGo()" disabled>Register</button>
             </div>
+
         </form>
     </div>
     <script type="text/javascript" src="javascript/index.js"></script>

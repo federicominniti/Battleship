@@ -24,21 +24,18 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        String targetJSP = null;
         if (levelDBDriver.checkIfUserExists(username)) {
             String message = "Username already in use.";
             request.setAttribute("msg", message);
-            String targetJSP = request.getContextPath() + "/index.jsp";
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
-            requestDispatcher.forward(request, response);
+            targetJSP = "/index.jsp";
         } else {
             User user  = levelDBDriver.addUser(username, email, password);
             HttpSession session = request.getSession(true);
             session.setAttribute("logged", user);
-            System.out.println((User)session.getAttribute("logged"));
-            String targetJSP = "./pages/homepage.jsp";
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
-            requestDispatcher.forward(request, response);
+            request.setAttribute("user", user);
+            targetJSP = "/pages/homepage.jsp";
         }
+        request.getRequestDispatcher(targetJSP).forward(request, response);
     }
 }

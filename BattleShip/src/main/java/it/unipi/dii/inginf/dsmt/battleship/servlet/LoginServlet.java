@@ -27,15 +27,14 @@ public class LoginServlet extends HttpServlet {
         if (user == null) {
             String message = "Wrong username or password.";
             request.setAttribute("msg", message);
-            String targetJSP = "/index.jsp";
+            String targetJSP = request.getContextPath() + "/index.jsp";
             RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
             requestDispatcher.forward(request, response);
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("logged", user);
-            String targetJSP = "./pages/homepage.jsp";
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
-            requestDispatcher.forward(request, response);
+            String targetJSP = request.getContextPath() + "./pages/homepage.jsp";
+            response.sendRedirect(targetJSP);
         }
     }
 }
