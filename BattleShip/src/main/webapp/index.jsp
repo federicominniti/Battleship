@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BattleShip</title>
     <!--link href="resources/css/style.css" rel="stylesheet" type="text/css"-->
-    <link rel="icon" type="image/png" href="./images/battleship_icon.png"/>
+    <link rel="icon" type="image/png" href="images/battleship_icon.png"/>
 </head>
 <body>
-
     <h1>BattleShip!</h1>
 
     <div>
@@ -35,13 +34,13 @@
                        onblur="checkPassword('password')" required><br>
                 <label>Repeat password</label>
                 <input type="password" placeholder="Repeat Password" id = "repeat_password" name="repeat_password"
-                       onblur="checkPasswordEquality('repeat_password')" required><br>
+                       onblur="checkPasswordEquality('password', 'repeat_password')" required><br>
 
                 <button type="submit" name="registerButton" value="register" id = "register"
-                        ononmousedown = "highlightsFieldsOrGo()">Register</button>
+                        ononmousedown = "highlightsFieldsOrGo()" disabled>Register</button>
             </div>
         </form>
     </div>
-    <script type="text/javascript" src="./javascript/index.js"></script>
+    <script type="text/javascript" src="javascript/index.js"></script>
 </body>
 </html>

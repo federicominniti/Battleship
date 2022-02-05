@@ -12,15 +12,18 @@ function checkUsername(){
 }
 
 function setStyle(id, check){
-    var element = document.getElementById(check);
+    var element = document.getElementById(id);
     if(check){
         element.style.borderColor = "green";
         element.style.borderStyle = "solid";
         element.style.borderWidth = "thick";
+        if(isAllOk())
+            document.getElementById("register").disabled = false;
     }else{
         element.style.borderColor = "red";
         element.style.borderStyle = "solid";
         element.style.borderWidth = "thick";
+        document.getElementById("register").disabled = true;
     }
 }
 
@@ -65,7 +68,7 @@ function checkPasswordEquality(id1, id2){
     }
 }
 
-function highlightsFieldsOrGo(){
+function isAllOk(){
     var username = document.getElementById("username");
     var password = document.getElementById("password");
     var repeat_password = document.getElementById("repeat_password");
@@ -73,14 +76,7 @@ function highlightsFieldsOrGo(){
     if(username.style.borderColor == "green" && password.style.borderColor == "green"
         && repeat_password.style.borderColor == "green"){
 
-        document.getElementsByClassName("register")[0].disabled = false;
+        return true;
     }
-    else{
-        if(username.value == "")
-            setStyle('username', false);
-        if(password.value == "")
-            setStyle('password', false);
-        if(repeat_password.value == "")
-            setStyle('repeat_password', false);
-    }
+    return false;
 }
