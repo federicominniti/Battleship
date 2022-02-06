@@ -81,6 +81,17 @@ function isAllOk(){
     return false;
 }
 
+function initForms(form) {
+
+    if (form == 'login-form') {
+        document.getElementById('register-form').setAttribute('class', 'hidden');
+        document.getElementById('login-form').setAttribute('class', 'visible');
+    } else {
+        document.getElementById('login-form').setAttribute('class', 'hidden');
+        document.getElementById('register-form').setAttribute('class', 'visible');
+    }
+}
+
 function changeForm(hide, visible) {
     console.log(hide, visible)
     document.getElementById(hide).setAttribute('class', 'hidden');

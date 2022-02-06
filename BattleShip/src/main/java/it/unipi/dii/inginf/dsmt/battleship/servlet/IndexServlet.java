@@ -28,35 +28,33 @@ public class IndexServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        response.setContentType("text/html");   // ???
 
         HttpSession session = request.getSession();
+        String targetJSP = null;
 
         // Login
         if (request.getParameter("loginButton") != null) {
             User user = levelDBDriver.login(username, password);
             if (user != null) {
                 session.setAttribute("loggedUser", user);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
-                requestDispatcher.forward(request, response);
+                targetJSP = "/pages/homepage.jsp";
             } else {
-                out.print("Access error: username and/or password are wrong!");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
-                requestDispatcher.include(request, response);
+                request.setAttribute("errorMsg", "Access error: username and/or password are wrong!");
+                request.setAttribute("form", "login-form");
+                targetJSP = "/index.jsp";
             }
         } else { //Register
             if (levelDBDriver.checkIfUserExists(username)) { //if the username already exists
-                out.print("Username already exists! Please choose another one");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
-                requestDispatcher.include(request, response);
+                request.setAttribute("errorMsg", "Username already exists! Please choose another one");
+                request.setAttribute("form", "register-form");
+                targetJSP = "/index.jsp";
             } else {
                 User user = levelDBDriver.addUser(username, email, password);
                 session.setAttribute("loggedUser", user);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
-                requestDispatcher.forward(request, response);
             }
         }
-        out.close();
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(targetJSP);
+        requestDispatcher.forward(request, response);
     }
 }

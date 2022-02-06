@@ -13,8 +13,13 @@
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
         dispatcher.forward(request, response);
     }
+    String message = (String) request.getAttribute("errorMsg");
+    String form = (String) request.getAttribute("form");
+    if (form == null){
+        form = "register-form";
+    }
 %>
-    <div id="container">
+    <div onload="initForms('<%= form %>')" id="container">
         <h1 id="title">BATTLESHIP!</h1>
         <div id="form-wrap">
             <form class="visible" id="login-form" action="access" method="post">
@@ -44,6 +49,9 @@
                         ononmousedown = "highlightsFieldsOrGo()" disabled>Register</button>
                 <a href="javascript:changeForm('register-form', 'login-form');">Already registered? Login</a>
             </form>
+            <% if (message != null) { %>
+                <cite class="error-msg"><%=message%></cite>
+            <% } %>
         </div>
     </div>
 
