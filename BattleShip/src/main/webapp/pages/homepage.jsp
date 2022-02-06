@@ -7,10 +7,10 @@
 </head>
 <body>
 <%
-    if (session.getAttribute("logged") == null) {
+    if (session.getAttribute("loggedUser") == null) {
         response.sendRedirect("../index.jsp");
     }
-    User user = (User) session.getAttribute("logged");
+    User user = (User) session.getAttribute("loggedUser");
 %>
     <h1>
         Welcome <%=user.getUsername()%>

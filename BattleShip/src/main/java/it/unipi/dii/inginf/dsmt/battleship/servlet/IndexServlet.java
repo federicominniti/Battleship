@@ -9,7 +9,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "IndexServlet", value = "/register")
+@WebServlet(name = "IndexServlet", value = "/access")
 public class IndexServlet extends HttpServlet {
 
     @Override
@@ -42,14 +42,14 @@ public class IndexServlet extends HttpServlet {
                 requestDispatcher.forward(request, response);
             } else {
                 out.print("Access error: username and/or password are wrong!");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/index.jsp");
-                requestDispatcher.forward(request, response);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
+                requestDispatcher.include(request, response);
             }
         } else { //Register
             if (levelDBDriver.checkIfUserExists(username)) { //if the username already exists
                 out.print("Username already exists! Please choose another one");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/pages/index.jsp");
-                requestDispatcher.forward(request, response);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
+                requestDispatcher.include(request, response);
             } else {
                 User user = levelDBDriver.addUser(username, email, password);
                 session.setAttribute("loggedUser", user);

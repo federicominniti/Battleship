@@ -22,7 +22,7 @@ public class IndexServletFilter implements Filter {
         HttpSession session = request.getSession();
         PrintWriter out = response.getWriter();
 
-        if (session.getAttribute("logged") != null) {
+        if (session.getAttribute("loggedUser") != null) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
             dispatcher.forward(request, response);
         } else {
