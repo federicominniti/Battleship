@@ -80,3 +80,9 @@ function isAllOk(){
     }
     return false;
 }
+
+function changeForm(hide, visible) {
+    console.log(hide, visible)
+    document.getElementById(hide).setAttribute('class', 'hidden');
+    document.getElementById(visible).setAttribute('class', 'visible');
+}
