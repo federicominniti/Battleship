@@ -11,4 +11,12 @@
     <error-code>404</error-code>
     <location>/pages/common/404.html</location>
   </error-page>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/pages/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>IndexServletFilter</filter-name>
+    <url-pattern>/index.jsp</url-pattern>
+  </filter-mapping>
 </web-app>
