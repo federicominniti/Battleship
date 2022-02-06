@@ -8,8 +8,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebFilter(filterName = "IndexServletFilter", servletNames = {"IndexServlet"})
-public class IndexServletFilter implements Filter {
+@WebFilter(filterName = "AuthFilter")
+public class AuthFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -17,14 +17,14 @@ public class IndexServletFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("index filter");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
         PrintWriter out = response.getWriter();
 
-        if (session.getAttribute("loggedUser") != null) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
+        System.out.println("auth filter");
+        if (session.getAttribute("loggedUser") == null) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
             dispatcher.forward(request, response);
         } else {
             filterChain.doFilter(request, response);

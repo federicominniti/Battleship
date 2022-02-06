@@ -8,12 +8,6 @@
     <link rel="icon" type="image/png" href="images/battleship_icon.png"/>
 </head>
 <body>
-<%
-    if (session.getAttribute("loggedUser") != null) {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
-        dispatcher.forward(request, response);
-    }
-%>
     <h1>BattleShip!</h1>
 
     <div>
