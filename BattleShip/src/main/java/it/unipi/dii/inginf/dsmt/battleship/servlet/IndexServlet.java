@@ -41,13 +41,11 @@ public class IndexServlet extends HttpServlet {
                 targetJSP = "/pages/homepage.jsp";
             } else {
                 request.setAttribute("errorMsg", "Access error: username and/or password are wrong!");
-                request.setAttribute("form", "login-form");
                 targetJSP = "/index.jsp";
             }
         } else { //Register
             if (levelDBDriver.checkIfUserExists(username)) { //if the username already exists
                 request.setAttribute("errorMsg", "Username already exists! Please choose another one");
-                request.setAttribute("form", "register-form");
                 targetJSP = "/index.jsp";
             } else {
                 User user = levelDBDriver.addUser(username, email, password);

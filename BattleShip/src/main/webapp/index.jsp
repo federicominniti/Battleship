@@ -10,12 +10,8 @@
 <body>
 <%
     String message = (String) request.getAttribute("errorMsg");
-    String form = (String) request.getAttribute("form");
-    if (form == null){
-        form = "register-form";
-    }
 %>
-    <div onload="initForms('<%= form %>')" id="container">
+    <div id="container">
         <h1 id="title">BATTLESHIP!</h1>
         <div id="form-wrap">
             <form class="visible" id="login-form" action="access" method="post">
