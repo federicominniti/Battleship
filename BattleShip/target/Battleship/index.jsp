@@ -9,10 +9,10 @@
 </head>
 <body>
 <%
-    if (session.getAttribute("loggedUser") != null) {
+    /*if (session.getAttribute("loggedUser") != null) {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
         dispatcher.forward(request, response);
-    }
+    }*/
     String message = (String) request.getAttribute("errorMsg");
     String form = (String) request.getAttribute("form");
     if (form == null){
