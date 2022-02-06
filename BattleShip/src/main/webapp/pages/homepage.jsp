@@ -15,7 +15,7 @@
     <h1>
         Welcome <%=user.getUsername()%>
     </h1>
-    <a href="/logout" >Log-out</a>
+    <button onclick = "window.location.href='./logout'">Logout</button>
 
 
 </body>
