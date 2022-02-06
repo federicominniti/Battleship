@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +8,16 @@
     <link rel="icon" type="image/png" href="images/battleship_icon.png"/>
 </head>
 <body>
+<%
+    if (session.getAttribute("loggedUser") != null) {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
+        dispatcher.forward(request, response);
+    }
+%>
     <h1>BattleShip!</h1>
 
     <div>
-        <form action="login" method="post">
+        <form action="access" method="post">
             <div>
                 <label>Username</label>
                 <input type="text" placeholder="Insert Username" name="username" required><br>
@@ -22,7 +28,7 @@
             </div>
         </form>
 
-        <form action="register" method="post">
+        <form action="access" method="post">
             <div>
                 <label>Email</label>
                 <input type="text" placeholder="Insert email" name="email" required><br>
@@ -37,9 +43,6 @@
                        onblur="checkPasswordEquality('password', 'repeat_password')" required><br>
                 <button type="submit" name="registerButton" value="register" id = "register"
                         ononmousedown = "highlightsFieldsOrGo()" disabled>Register</button>
-                <% if (request.getParameter("msg") != null) { %>
-                    <p class="error-msg"><%=request.getAttribute("msg")%></p>
-                <% } %>
             </div>
 
         </form>
