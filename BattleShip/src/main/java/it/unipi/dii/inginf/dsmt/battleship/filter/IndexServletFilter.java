@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebFilter(filterName = "IndexServletFilter", servletNames = {"IndexServlet"})
+@WebFilter(filterName = "IndexServletFilter", urlPatterns = {"/index.jsp"}, servletNames = {"IndexServlet"})
 public class IndexServletFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -21,7 +21,6 @@ public class IndexServletFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
-        PrintWriter out = response.getWriter();
 
         if (session.getAttribute("loggedUser") != null) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
