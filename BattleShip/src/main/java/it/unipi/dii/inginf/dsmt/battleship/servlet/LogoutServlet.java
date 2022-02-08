@@ -19,12 +19,9 @@ public class LogoutServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("loggedUser") != null) {
-            session.invalidate();
-        }
+        session.invalidate();
 
         response.setContentType("text/html");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
     }
 }

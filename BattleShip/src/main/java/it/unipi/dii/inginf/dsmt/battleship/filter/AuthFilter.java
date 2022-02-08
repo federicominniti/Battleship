@@ -23,8 +23,7 @@ public class AuthFilter implements Filter {
 
         // System.out.println("auth filter");
         if (session.getAttribute("loggedUser") == null) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
-            dispatcher.forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {
             filterChain.doFilter(request, response);
         }

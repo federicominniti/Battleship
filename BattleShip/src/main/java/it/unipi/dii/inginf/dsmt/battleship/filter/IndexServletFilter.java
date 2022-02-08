@@ -23,8 +23,7 @@ public class IndexServletFilter implements Filter {
         HttpSession session = request.getSession();
 
         if (session.getAttribute("loggedUser") != null) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/homepage.jsp");
-            dispatcher.forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
         } else {
             filterChain.doFilter(request, response);
         }

@@ -12,7 +12,7 @@
     <h1>
         Welcome <%=user.getUsername() %>
     </h1>
-    <button onclick = "window.location.href='./logout'">Logout</button>
+    <button onclick = "window.location.href='../logout'">Logout</button>
 
 </body>
 </html>

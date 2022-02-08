@@ -4,10 +4,34 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>it.unipi.dii.inginf.dsmt.battleship.filter.AuthFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>IndexServletFilter</filter-name>
+    <filter-class>it.unipi.dii.inginf.dsmt.battleship.filter.IndexServletFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>IndexServletFilter</filter-name>
+    <url-pattern>/index.jsp</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/pages/*</url-pattern>
+  </filter-mapping>
   <servlet>
     <servlet-name>IndexServlet</servlet-name>
     <servlet-class>it.unipi.dii.inginf.dsmt.battleship.servlet.IndexServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>it.unipi.dii.inginf.dsmt.battleship.servlet.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>IndexServlet</servlet-name>
     <url-pattern>/access</url-pattern>
