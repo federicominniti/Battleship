@@ -7,6 +7,7 @@ import it.unipi.dii.inginf.dsmt.battleship.intefaces.BattleshipRemote;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.List;
@@ -20,6 +21,17 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private UserDTO convertToDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setGameWins(user.getGameWins());
+        dto.setGameWins(user.getGameWins());
+        dto.setGameLose(user.getGameLose());
+        return dto;
+    }
+
     @Override
     public List<UserDTO> rankingUsersJPA(int limit) {
         return null;
@@ -30,13 +42,7 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         User user = entityManager.find(User.class, username);
         if (user == null)
             return null;
-        UserDTO dto = new UserDTO();
-        dto.setUsername(user.getUsername());
-        dto.setEmail(user.getEmail());
-        dto.setPassword(user.getPassword());
-        dto.setGameWins(user.getGameWins());
-        dto.setGameWins(user.getGameWins());
-        dto.setGameLose(user.getGameLose());
+        UserDTO dto = convertToDTO(user);
         return dto;
     }
 
@@ -46,32 +52,27 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        // user.setGameWins(dto.getGameWins());
-        // user.setGameLose(dto.getGameLose());
         entityManager.persist(user);
         return dto;
     }
 
     @Override
     public UserDTO login(String username, String password) {
-        User user = entityManager.createQuery(
-                     "SELECT u " +
-                        "FROM User u " +
-                        "WHERE u.username = :username and " +
-                        " u.password = :password",
-                User.class)
-                .setParameter("username", username)
-                .setParameter("password", password)
-                .getSingleResult();
-        if (user == null)
+        User user;
+        try {
+            user = entityManager.createQuery(
+                            "SELECT u " +
+                                    "FROM User u " +
+                                    "WHERE u.username = :username and " +
+                                    " u.password = :password",
+                            User.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .getSingleResult();
+        } catch (NoResultException e) {
             return null;
-        UserDTO dto = new UserDTO();
-        dto.setUsername(user.getUsername());
-        dto.setEmail(user.getEmail());
-        dto.setPassword(user.getPassword());
-        dto.setGameWins(user.getGameWins());
-        dto.setGameWins(user.getGameWins());
-        dto.setGameLose(user.getGameLose());
+        }
+        UserDTO dto = convertToDTO(user);
         return dto;
     }
 }
