@@ -44,10 +44,30 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setGameWins(dto.getGameWins());
-        user.setGameWins(dto.getGameWins());
-        user.setGameLose(dto.getGameLose());
+        // user.setGameWins(dto.getGameWins());
+        // user.setGameLose(dto.getGameLose());
         entityManager.persist(user);
+        return dto;
+    }
+
+    @Override
+    public UserDTO login(String username, String password) {
+        User user = entityManager.createQuery(
+                     "SELECT u " +
+                        "FROM User u " +
+                        "WHERE u.username = :username and " +
+                        " u.password = :password",
+                User.class)
+                .setParameter("username", username)
+                .setParameter("password", password)
+                .getSingleResult();
+        UserDTO dto = new UserDTO();
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setGameWins(user.getGameWins());
+        dto.setGameWins(user.getGameWins());
+        dto.setGameLose(user.getGameLose());
         return dto;
     }
 }

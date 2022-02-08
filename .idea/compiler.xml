@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="ejb-interfaces" />
         <module name="ejb-implementation" />
+        <module name="webapp-battleship" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Battleship" target="1.7" />
       <module name="ejb-implementation" target="1.7" />
       <module name="ejb-interfaces" target="1.7" />
+      <module name="webapp-battleship" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,7 +1,0 @@
-it/unipi/dii/inginf/dsmt/battleship/filter/AuthFilter.class
-it/unipi/dii/inginf/dsmt/battleship/servlet/LogoutServlet.class
-it/unipi/dii/inginf/dsmt/battleship/servlet/IndexServlet.class
-it/unipi/dii/inginf/dsmt/battleship/config/Config.class
-it/unipi/dii/inginf/dsmt/battleship/persistence/LevelDBDriver.class
-it/unipi/dii/inginf/dsmt/battleship/filter/IndexServletFilter.class
-it/unipi/dii/inginf/dsmt/battleship/model/User.class

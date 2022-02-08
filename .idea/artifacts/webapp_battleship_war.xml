@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="webapp-battleship:war">
+    <output-path>$PROJECT_DIR$/BattleShip/webapp-battleship/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>webapp-battleship</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="webapp-battleship.war">
+      <element id="artifact" artifact-name="webapp-battleship:war exploded" />
+    </root>
+  </artifact>
+</component>

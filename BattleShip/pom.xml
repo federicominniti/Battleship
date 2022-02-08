@@ -10,6 +10,7 @@
     <modules>
         <module>ejb-interfaces</module>
         <module>ejb-implementation</module>
+        <module>webapp-battleship</module>
     </modules>
     <packaging>pom</packaging>
 

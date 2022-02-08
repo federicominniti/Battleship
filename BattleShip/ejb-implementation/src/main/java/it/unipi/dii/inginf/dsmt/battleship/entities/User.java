@@ -16,9 +16,9 @@ public class User implements Serializable {
     private String email;
     @Column(name = "password")
     private String password;
-    @Column(name = "gameWins")
+    @Column(name = "gameWins", columnDefinition = "int default 0")
     private int gameWins;
-    @Column(name = "gameLose")
+    @Column(name = "gameLose", columnDefinition = "int default 0")
     private int gameLose;
 
     public String getUsername() {

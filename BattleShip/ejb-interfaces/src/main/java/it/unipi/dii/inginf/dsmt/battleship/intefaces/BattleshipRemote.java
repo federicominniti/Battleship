@@ -10,4 +10,5 @@ public interface BattleshipRemote {
     public List<UserDTO> rankingUsersJPA(int limit);
     public UserDTO findByUsernameJPA(String username);
     public UserDTO saveUserJPA(UserDTO dto);
+    public UserDTO login(String username, String password);
 }
