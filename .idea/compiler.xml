@@ -6,11 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Battleship" />
+        <module name="ejb-interfaces" />
+        <module name="ejb-implementation" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Battleship" target="1.7" />
+      <module name="ejb-implementation" target="1.7" />
+      <module name="ejb-interfaces" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

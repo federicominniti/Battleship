@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BattleShip/Battleship.iml" filepath="$PROJECT_DIR$/BattleShip/Battleship.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BattleShip/ejb-implementation/ejb-implementation.iml" filepath="$PROJECT_DIR$/BattleShip/ejb-implementation/ejb-implementation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BattleShip/ejb-interfaces/ejb-interfaces.iml" filepath="$PROJECT_DIR$/BattleShip/ejb-interfaces/ejb-interfaces.iml" />
     </modules>
   </component>
 </project>

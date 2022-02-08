@@ -3,7 +3,8 @@
 
 <html>
 <%
-    User user = (User) session.getAttribute("loggedUser");%>
+    User user = (User) session.getAttribute("loggedUser");
+%>
 <head>
     <title>BattleShip - HomePage</title>
 </head>
