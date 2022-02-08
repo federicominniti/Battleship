@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.glassfish.external:asm-all:6.0_ALPHA">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/glassfish/external/asm-all/6.0_ALPHA/asm-all-6.0_ALPHA.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/glassfish/external/asm-all/6.0_ALPHA/asm-all-6.0_ALPHA-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/glassfish/external/asm-all/6.0_ALPHA/asm-all-6.0_ALPHA-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

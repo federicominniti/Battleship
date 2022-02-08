@@ -28,6 +28,8 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     @Override
     public UserDTO findByUsernameJPA(String username) {
         User user = entityManager.find(User.class, username);
+        if (user == null)
+            return null;
         UserDTO dto = new UserDTO();
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
@@ -61,6 +63,8 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
                 .setParameter("username", username)
                 .setParameter("password", password)
                 .getSingleResult();
+        if (user == null)
+            return null;
         UserDTO dto = new UserDTO();
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());

@@ -58,6 +58,12 @@
             <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.main.appclient</groupId>
+            <artifactId>gf-client</artifactId>
+            <version>5.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

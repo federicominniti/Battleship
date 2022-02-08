@@ -1,9 +1,9 @@
-<%@ page import="it.unipi.dii.inginf.dsmt.battleship.model.User" %>
+<%@ page import="it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
 <%
-    User user = (User) session.getAttribute("loggedUser");
+    UserDTO user = (UserDTO) session.getAttribute("loggedUser");
 %>
 <head>
     <title>BattleShip - HomePage</title>

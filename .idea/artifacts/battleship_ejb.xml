@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-ejb" name="battleship_ejb">
+    <output-path>$PROJECT_DIR$/out/artifacts/battleship_ejb</output-path>
+    <root id="root">
+      <element id="module-output" name="ejb-interfaces" />
+      <element id="module-output" name="ejb-implementation" />
+    </root>
+  </artifact>
+</component>
