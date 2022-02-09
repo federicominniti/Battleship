@@ -37,8 +37,7 @@
                 <input type="password" placeholder="Repeat Password" id = "repeat_password" name="repeat_password"
                        onblur="checkPasswordEquality('password', 'repeat_password')" required><br>
 
-                <button class="button" type="submit" name="registerButton" value="register" id ="register"
-                        ononmousedown = "highlightsFieldsOrGo()" disabled>Register</button>
+                <button class="button" type="submit" name="registerButton" value="register" id ="register" disabled>Register</button>
                 <a href="javascript:changeForm('register-form', 'login-form');">Already registered? Login</a>
             </form>
             <% if (message != null) { %>
