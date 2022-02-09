@@ -8,19 +8,20 @@ function checkUsername(){
     */
     var regex = new RegExp("^[a-zA-Z]+([!_.]?[a-zA-Z0-9]){4,9}$");
     var checkRegex = regex.test(username.value);
+    console.log(checkRegex)
     setStyle("username", checkRegex);
 }
 
 function setStyle(id, check){
     var element = document.getElementById(id);
     if(check){
-        element.style.borderColor = "#4dff4d";
+        element.style.borderColor = "green";
         element.style.borderStyle = "solid";
         element.style.borderWidth = "thick";
         if(isAllOk())
             document.getElementById("register").disabled = false;
     }else{
-        element.style.borderColor = "#ff4d4d";
+        element.style.borderColor = "red";
         element.style.borderStyle = "solid";
         element.style.borderWidth = "thick";
         document.getElementById("register").disabled = true;
@@ -51,17 +52,20 @@ function checkPassword(id){
         patternOk = false;
     }
 
+    console.log(patternOk)
     setStyle(id, patternOk);
 }
 
 function checkPasswordEquality(id1, id2){
     var password = document.getElementById(id1);
     var repeatPassword = document.getElementById(id2);
-    if(password.value != '' && repeatPassword.value != ''){
+    if(password.value !== '' && repeatPassword.value !== ''){
         if(password.value === repeatPassword.value){
+            console.log("password ok")
             setStyle(id1, true);
             setStyle(id2, true);
         } else{
+            console.log("password not ok")
             setStyle(id1, false);
             setStyle(id2, false);
         }
@@ -73,10 +77,14 @@ function isAllOk(){
     var password = document.getElementById("password");
     var repeat_password = document.getElementById("repeat_password");
 
-    if(username.style.borderColor == "#4dff4d" && password.style.borderColor == "#4dff4d"
-        && repeat_password.style.borderColor == "#4dff4d"){
+    if(username.style.borderColor === "green" && password.style.borderColor === "green"
+        && repeat_password.style.borderColor === "green"){
+
+        console.log("is all ok")
         return true;
     }
+
+    console.log("not all ok")
     return false;
 }
 
