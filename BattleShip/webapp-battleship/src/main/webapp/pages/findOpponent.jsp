@@ -17,7 +17,7 @@
     <h2>Waiting for a match</h2>
     <div>
         <div>
-            <table id="online">
+            <table id="onlineUsers">
                 <tr>
                     <th>Username</th>
                 </tr>
