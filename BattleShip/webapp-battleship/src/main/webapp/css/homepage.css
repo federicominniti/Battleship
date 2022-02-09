@@ -63,6 +63,20 @@ p {
 
 }
 
+#online-users {
+    grid-column: 7/11;
+    grid-row: 4/5;
+    background-color: #0406D3;
+    border-radius: 15px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+    row-gap: 10px;
+    color: white;
+}
+
 #ranking {
     grid-column: 3/7;
     grid-row: 4/5;
@@ -75,6 +89,18 @@ p {
     justify-items: center;
     row-gap: 10px;
     color: white;
+}
+
+
+.info-rank {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    background-color: darkorange;
+    border-radius: 15px;
+    width: 100%;
+    height: 25px;
 }
 
 .button {

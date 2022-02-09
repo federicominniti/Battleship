@@ -47,7 +47,7 @@ public class IndexServlet extends HttpServlet {
         }
 
         // Login
-        if (request.getAttribute("loginButton") == null) {
+        if (request.getParameter("loginButton") != null) {
             UserDTO user = battleshipRemote.login(username, password);
             if (user != null) {
                 session.setAttribute("loggedUser", user);

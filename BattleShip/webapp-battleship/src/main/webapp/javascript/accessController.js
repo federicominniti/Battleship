@@ -75,7 +75,6 @@ function isAllOk(){
 
     if(username.style.borderColor == "#4dff4d" && password.style.borderColor == "#4dff4d"
         && repeat_password.style.borderColor == "#4dff4d"){
-
         return true;
     }
     return false;

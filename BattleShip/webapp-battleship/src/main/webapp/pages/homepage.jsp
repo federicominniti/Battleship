@@ -45,11 +45,12 @@
         </header>
         <button id="play" class="button">SEARCH BATTLE</button>
         <div id="ranking">
+            <cite>Best Player</cite>
             <% if (rank != null) {
                 for (UserDTO dto: rank) { %>
                     <div class="info-rank">
-                        <p><%= dto.getUsername()%></p>
-                        <p><%= dto.getWinsRatio()%></p>
+                        <label><%= dto.getUsername()%></label>
+                        <label><%= dto.getWinsRatio()%></label>
                     </div>
             <%
                 }
@@ -58,7 +59,7 @@
             <% } %>
         </div>
         <div id="online-users">
-
+            <cite>Online Player</cite>
         </div>
     </div>
 
