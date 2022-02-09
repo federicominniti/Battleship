@@ -9,6 +9,7 @@ public class UserDTO implements Serializable {
     private String password;
     private int gameWins;
     private int gameLose;
+    private Double winsRatio;
 
     public String getUsername() {
         return username;
@@ -30,6 +31,10 @@ public class UserDTO implements Serializable {
         return gameLose;
     }
 
+    public Double getWinsRatio() {
+        return winsRatio;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -48,5 +53,9 @@ public class UserDTO implements Serializable {
 
     public void setGameLose(int gameLose) {
         this.gameLose = gameLose;
+    }
+
+    public void setWinsRatio(Double winsRatio) {
+        this.winsRatio = winsRatio;
     }
 }

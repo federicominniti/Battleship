@@ -1,6 +1,5 @@
 package it.unipi.dii.inginf.dsmt.battleship;
 
-import com.sun.tools.javac.util.Pair;
 import it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO;
 import it.unipi.dii.inginf.dsmt.battleship.entities.User;
 import it.unipi.dii.inginf.dsmt.battleship.intefaces.BattleshipRemote;
@@ -36,7 +35,7 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     }
 
     @Override
-    public List<Pair<UserDTO, Double>> rankingUsersJPA(int limit) {
+    public List<UserDTO> rankingUsersJPA(int limit) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("select u.*, ifnull((u.gameWins / (u.gameWins + u.gameLose)), 0) as ratio\n" +
                 "from User u\n" +
@@ -46,13 +45,14 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         query.setParameter("limit", limit);
 
         List<Object[]> dbResult = query.getResultList();
-        List<Pair<UserDTO, Double>> results = new ArrayList<>();
+        List<UserDTO> results = new ArrayList<>();
         if (dbResult != null && !dbResult.isEmpty()) {
             for(Object[] UserInfo: dbResult) {
                 User user = (User) UserInfo[0];
                 Double ratio = (Double) UserInfo[1];
                 UserDTO dto = convertToDTO(user);
-                results.add(new Pair<UserDTO, Double>(dto, ratio));
+                dto.setWinsRatio(ratio);
+                results.add(dto);
             }
         }
         return results;
