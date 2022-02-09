@@ -1,17 +1,18 @@
 <%@ page import="it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="it.unipi.dii.inginf.dsmt.battleship.intefaces.BattleshipRemote" %>
+<%@ page import="javax.ejb.EJB" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
 <%
+    List<UserDTO> rank = (List<UserDTO>) session.getAttribute("ranking");
     UserDTO user = (UserDTO) session.getAttribute("loggedUser");
 %>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    </stvle>
-    <link rel="icon" type="image/png" href="images/battleship_icon.png"/>
+    <link rel="icon" type="image/png" href="./../images/battleship_icon.png"/>
     <link href="./../css/homepage.css" rel="stylesheet" type="text/css">
-
     <title>BattleShip - HomePage</title>
 </head>
 <body>
@@ -44,7 +45,17 @@
         </header>
         <button id="play" class="button">SEARCH BATTLE</button>
         <div id="ranking">
-
+            <% if (rank != null) {
+                for (UserDTO dto: rank) { %>
+                    <div class="info-rank">
+                        <p><%= dto.getUsername()%></p>
+                        <p><%= dto.getWinsRatio()%></p>
+                    </div>
+            <%
+                }
+            } else { %>
+                <p>We don't find any User</p>
+            <% } %>
         </div>
         <div id="online-users">
 

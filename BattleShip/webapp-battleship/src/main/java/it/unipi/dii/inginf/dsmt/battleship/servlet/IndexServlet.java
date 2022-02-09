@@ -10,6 +10,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 @WebServlet(name = "IndexServlet", value = {"/access"})
 public class IndexServlet extends HttpServlet {
@@ -46,11 +47,12 @@ public class IndexServlet extends HttpServlet {
         }
 
         // Login
-        if (email == null) {
+        if (request.getAttribute("loginButton") == null) {
             UserDTO user = battleshipRemote.login(username, password);
             if (user != null) {
                 session.setAttribute("loggedUser", user);
-
+                List<UserDTO> ranking = battleshipRemote.rankingUsersJPA(10);
+                session.setAttribute("ranking", ranking);
                 response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
                 return;
             } else {
@@ -66,6 +68,8 @@ public class IndexServlet extends HttpServlet {
                 user.setPassword(password);
                 battleshipRemote.saveUserJPA(user);
                 session.setAttribute("loggedUser", user);
+                List<UserDTO> ranking = battleshipRemote.rankingUsersJPA(10);
+                session.setAttribute("ranking", ranking);
                 response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
                 return;
             }

@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         UserDTO dto = new UserDTO();
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
-        dto.setPassword(user.getPassword());
+        dto.setPassword(null);                  // do not pass the password
         dto.setGameWins(user.getGameWins());
         dto.setGameWins(user.getGameWins());
         dto.setGameLose(user.getGameLose());
@@ -36,22 +37,19 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
 
     @Override
     public List<UserDTO> rankingUsersJPA(int limit) {
-        StringBuilder jpql = new StringBuilder();
-        jpql.append("select u.*, ifnull((u.gameWins / (u.gameWins + u.gameLose)), 0) as ratio\n" +
-                "from User u\n" +
-                "order by ratio desc\n" +
-                "limit :limit");
-        Query query = entityManager.createQuery(jpql.toString());
-        query.setParameter("limit", limit);
-
+        Query query = entityManager.createQuery(
+                "SELECT u, COALESCE((u.gameWins / (u.gameWins + u.gameLose)), 0) AS ratio " +
+                "FROM User u " +
+                "ORDER BY u.gameWins DESC", User.class).setMaxResults(limit);
         List<Object[]> dbResult = query.getResultList();
         List<UserDTO> results = new ArrayList<>();
         if (dbResult != null && !dbResult.isEmpty()) {
             for(Object[] UserInfo: dbResult) {
                 User user = (User) UserInfo[0];
-                Double ratio = (Double) UserInfo[1];
+                BigDecimal ratio = (BigDecimal) UserInfo[1];
+                Double ratioDTO = ratio.doubleValue();
                 UserDTO dto = convertToDTO(user);
-                dto.setWinsRatio(ratio);
+                dto.setWinsRatio(ratioDTO);
                 results.add(dto);
             }
         }
