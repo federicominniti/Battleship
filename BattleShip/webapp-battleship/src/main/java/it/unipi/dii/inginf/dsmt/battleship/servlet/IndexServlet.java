@@ -40,17 +40,17 @@ public class IndexServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String targetJSP = null;
 
-        if (username == null) {
+        if (username == null || password == null) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
         // Login
-        if (request.getParameter("loginButton") != null) {
+        if (email == null) {
             UserDTO user = battleshipRemote.login(username, password);
-            //User user = levelDBDriver.login(username, password);
             if (user != null) {
                 session.setAttribute("loggedUser", user);
+
                 response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
                 return;
             } else {

@@ -1,5 +1,6 @@
 package it.unipi.dii.inginf.dsmt.battleship;
 
+import com.sun.tools.javac.util.Pair;
 import it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO;
 import it.unipi.dii.inginf.dsmt.battleship.entities.User;
 import it.unipi.dii.inginf.dsmt.battleship.intefaces.BattleshipRemote;
@@ -9,7 +10,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -33,8 +36,26 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     }
 
     @Override
-    public List<UserDTO> rankingUsersJPA(int limit) {
-        return null;
+    public List<Pair<UserDTO, Double>> rankingUsersJPA(int limit) {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("select u.*, ifnull((u.gameWins / (u.gameWins + u.gameLose)), 0) as ratio\n" +
+                "from User u\n" +
+                "order by ratio desc\n" +
+                "limit :limit");
+        Query query = entityManager.createQuery(jpql.toString());
+        query.setParameter("limit", limit);
+
+        List<Object[]> dbResult = query.getResultList();
+        List<Pair<UserDTO, Double>> results = new ArrayList<>();
+        if (dbResult != null && !dbResult.isEmpty()) {
+            for(Object[] UserInfo: dbResult) {
+                User user = (User) UserInfo[0];
+                Double ratio = (Double) UserInfo[1];
+                UserDTO dto = convertToDTO(user);
+                results.add(new Pair<UserDTO, Double>(dto, ratio));
+            }
+        }
+        return results;
     }
 
     @Override

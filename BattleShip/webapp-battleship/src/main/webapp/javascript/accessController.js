@@ -14,13 +14,13 @@ function checkUsername(){
 function setStyle(id, check){
     var element = document.getElementById(id);
     if(check){
-        element.style.borderColor = "green";
+        element.style.borderColor = "#4dff4d";
         element.style.borderStyle = "solid";
         element.style.borderWidth = "thick";
         if(isAllOk())
             document.getElementById("register").disabled = false;
     }else{
-        element.style.borderColor = "red";
+        element.style.borderColor = "#ff4d4d";
         element.style.borderStyle = "solid";
         element.style.borderWidth = "thick";
         document.getElementById("register").disabled = true;
@@ -73,24 +73,14 @@ function isAllOk(){
     var password = document.getElementById("password");
     var repeat_password = document.getElementById("repeat_password");
 
-    if(username.style.borderColor == "green" && password.style.borderColor == "green"
-        && repeat_password.style.borderColor == "green"){
+    if(username.style.borderColor == "#4dff4d" && password.style.borderColor == "#4dff4d"
+        && repeat_password.style.borderColor == "#4dff4d"){
 
         return true;
     }
     return false;
 }
 
-function initForms(form) {
-
-    if (form == 'login-form') {
-        document.getElementById('register-form').setAttribute('class', 'hidden');
-        document.getElementById('login-form').setAttribute('class', 'visible');
-    } else {
-        document.getElementById('login-form').setAttribute('class', 'hidden');
-        document.getElementById('register-form').setAttribute('class', 'visible');
-    }
-}
 
 function changeForm(hide, visible) {
     console.log(hide, visible)

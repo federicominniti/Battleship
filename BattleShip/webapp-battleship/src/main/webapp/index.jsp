@@ -12,7 +12,7 @@
     String message = (String) request.getAttribute("errorMsg");
 %>
     <div id="container">
-        <h1 id="title">BATTLESHIP!</h1>
+        <img height="300" width="400" src="./images/Battleship-logos_black.png" alt="logo">
         <div id="form-wrap">
             <form class="visible" id="login-form" action="access" method="post">
                 <label>Username</label>
