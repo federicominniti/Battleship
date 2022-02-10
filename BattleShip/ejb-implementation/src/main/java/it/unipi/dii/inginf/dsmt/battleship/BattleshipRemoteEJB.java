@@ -66,13 +66,12 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     }
 
     @Override
-    public UserDTO saveUserJPA(UserDTO dto) {
+    public void saveUserJPA(UserDTO dto) {
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
         entityManager.persist(user);
-        return dto;
     }
 
     @Override
@@ -93,5 +92,22 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         }
         UserDTO dto = convertToDTO(user);
         return dto;
+    }
+
+    public void saveGame(UserDTO dto, boolean winOrLoss) {
+        Query query;
+        if (winOrLoss) {
+            query = entityManager.createQuery(
+                    "UPDATE User u SET u.gameWins = u.gameWins + 1 WHERE u.username = '" + dto.getUsername() + "'"
+            );
+
+        } else {
+            query = entityManager.createQuery(
+                    "UPDATE User u SET u.gameLose = u.gameLose + 1 WHERE u.username = '" + dto.getUsername() + "'"
+            );
+
+        }
+
+        query.executeUpdate();
     }
 }
