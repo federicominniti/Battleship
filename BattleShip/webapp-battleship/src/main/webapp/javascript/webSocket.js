@@ -20,7 +20,7 @@ function initWebSocket(username) {
     ws.onopen = function (event) {
         console.log('Connected with the messages server');
         // At the beginning, send a message for registering the username
-        ws.send(JSON.stringify(new Message("username_registration", username, username, null)));
+        ws.send(JSON.stringify(new Message("user_online", username, username, null)));
     };
     ws.onmessage = function (event) {
         console.log(event.data);
