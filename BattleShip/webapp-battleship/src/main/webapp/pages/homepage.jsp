@@ -61,6 +61,8 @@
         <div id="online-users">
             <cite>Online Player</cite>
         </div>
+        <div id="received-request">
+        </div>
     </div>
 
 
