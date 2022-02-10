@@ -5,11 +5,13 @@
   {mod, {battleship_server_erlang_app, []}},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+	cowboy
    ]},
   {env,[]},
   {modules, []},
 
+  {maintainers, []},
   {licenses, ["Apache 2.0"]},
   {links, []}
  ]}.
