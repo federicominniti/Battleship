@@ -3,9 +3,9 @@
 initWebSocket(username);
 
 // Publish the user oline and available for a new game
-waitForSocketConnection(ws, function(){
-    sendWebSocket(new Message("user_online", null , username, null));
-});
+//waitForSocketConnection(ws, function(){
+//    sendWebSocket(new Message("user_online", null , username, null));
+//});
 
 //------------------------
 
@@ -45,27 +45,18 @@ ws.onmessage = function (event){
 
         table.appendChild(tr);
     }
-    else if (jsonString.type === 'game_request_accepted')   // My opponent has accepted my game request
-    {
+    else if (jsonString.type === 'game_request_accepted') { // My opponent has accepted my game request
         // If my opponent accepted a game request for a game that is not
-        // the one I have selected there is an error, return
-        if(jsonString.data !== gameName) return;
-
-        // Otherwise, the game starts
-        if (gameName === "connectFour")
-            goToConnectFourGame("yellow", sender);
-        else if (gameName === "ticTacToe")
-        {
-            goToTicTacToeGame(username, sender);
-        }
+        startBattleship(username, sender);
     } else if(jsonString.type === 'updated_online_users') // The list of online users has changed
     {
         let list = jsonString.data;
-        let table = document.getElementById("onlineUsers");
-
-        while(table.childNodes.length > 2) {
-            table.removeChild(table.lastChild);
+        let container = document.getElementById("online-users");
+        if (container.getElementsByTagName("table")[0] != null){
+            let oldTable = container.getElementsByTagName("table")[0];
+            oldTable.remove();
         }
+        let table = document.createElement("table");
 
         for (let i = 0; i < list.length; i++) {
             let tr = document.createElement("tr");
@@ -77,6 +68,7 @@ ws.onmessage = function (event){
 
             tr.appendChild(td);
             table.appendChild(tr);
+            container.appendChild(table);
         }
     } else if(jsonString.type === 'remove_requests') {  // A precedent request is not still valid because a user might not be online anymore
         let table = document.getElementById("gameRequests");
@@ -90,7 +82,7 @@ ws.onmessage = function (event){
         }
     } else if(jsonString.type === 'logged_sender_error'){
         alert("You are logged in from another device!")
-        document.location.href = './logout';
+        document.location.href = './../logout';
     }
 };
 
