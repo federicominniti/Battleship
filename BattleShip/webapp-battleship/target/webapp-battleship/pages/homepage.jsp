@@ -64,6 +64,10 @@
     </div>
 
 
-
+    <script>
+        var username = '<%= user.getUsername() %>';
+    </script>
+    <script src="./../javascript/webSocket.js"></script>
+    <script src="./../javascript/homepage.js"></script>
 </body>
 </html>
