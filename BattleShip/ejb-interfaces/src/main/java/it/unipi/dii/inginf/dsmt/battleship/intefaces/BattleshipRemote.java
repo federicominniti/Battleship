@@ -9,7 +9,7 @@ import java.util.List;
 public interface BattleshipRemote {
     public List<UserDTO> rankingUsersJPA(int limit);
     public UserDTO findByUsernameJPA(String username);
-    public UserDTO saveUserJPA(UserDTO dto);
+    public void saveUserJPA(UserDTO dto);
     public void saveGame(UserDTO dto, boolean winOrLoss);
     public UserDTO login(String username, String password);
 }

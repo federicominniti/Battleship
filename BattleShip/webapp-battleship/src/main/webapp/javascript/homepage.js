@@ -54,7 +54,7 @@ ws.onmessage = function (event){
     }
     else if (jsonString.type === 'battleship_accepted') { // My opponent has accepted my game request
         // If my opponent accepted a game request for a game that is not
-        startBattleship(username, sender);
+        startBattleship(sender);
     } else if(jsonString.type === 'updated_online_users') // The list of online users has changed
     {
         let list = jsonString.data;
@@ -105,7 +105,7 @@ function acceptRequest (opponent) {
     // We need to wait some milliseconds, otherwise there can be some problems
     setTimeout(
         function () {
-                startBattleship(username, opponent);
+                startBattleship(opponent);
         }, 800
     );
 }
@@ -117,4 +117,20 @@ function sendRequestForAGame(possibleOpponent) {
 function removeOnClick(element){
     element.removeEventListener("click", null);
     element.style.color = "orange";
+}
+
+function startBattleship(opponent){
+    let hiddenForm = document.createElement("form");
+    hiddenForm.setAttribute('method',"post");
+    hiddenForm.setAttribute('action',"game");
+
+    let opponentUsername = document.createElement("input");
+    opponentUsername.setAttribute('type',"text");
+    opponentUsername.setAttribute('name', "opponentUsername");
+    opponentUsername.setAttribute('value', opponent);
+
+    hiddenForm.appendChild(opponentUsername);
+    hiddenForm.style.visibility = "hidden";
+    document.body.appendChild(hiddenForm);
+    hiddenForm.submit();
 }
