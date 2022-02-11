@@ -7,6 +7,13 @@
     <link href="./../css/game.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="../javascript/gameController.js"></script>
     <script type="text/javascript" src="../javascript/game.js"></script>
+    <script type="text/javascript" src="../javascript/chat.js" defer></script>
+    <script type="text/javascript">
+        <% UserDTO loggedUser = (UserDTO) session.getAttribute("loggedUser");
+            String loggedUsername = loggedUser.getUsername(); %>
+        let loggedUser = '<%= loggedUsername %>';
+        let opponent = '<%= request.getAttribute("opponentUsername")%>';
+    </script>
     <title>Battleship - Game</title>
 </head>
 <body>
@@ -77,8 +84,8 @@
             <div id="list-message">
             </div>
             <div id="keyboard">
-                <textarea name="" id="" cols="30" rows="10"></textarea>
-                <button disabled>SEND</button>
+                <textarea name="" id="message" cols="30" rows="10"></textarea>
+                <button id="sendMsgButton">SEND</button>
             </div>
         </div>
     </div>
