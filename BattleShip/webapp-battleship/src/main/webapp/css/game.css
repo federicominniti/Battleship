@@ -1,0 +1,174 @@
+body{
+    background-color: #00fff4;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'%3E%3Cpath fill='%230040ff' fill-opacity='0.4' d='M14 16H9v-2h5V9.87a4 4 0 1 1 2 0V14h5v2h-5v15.95A10 10 0 0 0 23.66 27l-3.46-2 8.2-2.2-2.9 5a12 12 0 0 1-21 0l-2.89-5 8.2 2.2-3.47 2A10 10 0 0 0 14 31.95V16zm40 40h-5v-2h5v-4.13a4 4 0 1 1 2 0V54h5v2h-5v15.95A10 10 0 0 0 63.66 67l-3.47-2 8.2-2.2-2.88 5a12 12 0 0 1-21.02 0l-2.88-5 8.2 2.2-3.47 2A10 10 0 0 0 54 71.95V56zm-39 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm40-40a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm40 40a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'%3E%3C/path%3E%3C/svg%3E");
+    background-attachment: fixed;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    margin: 10px;
+    padding: 20px;
+    max-height: 100vh;
+}
+
+#container{
+    display: grid;
+    grid-template-columns: 1fr 2fr 5fr 2fr 1fr;
+    grid-auto-rows: minmax(20px, auto);
+    grid-gap: 10px;
+    margin: 0;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+    justify-items: center;
+    align-items: start;
+}
+/*------------------------------------TOP BAR----------------------------*/
+
+#game-info {
+    padding: 10px;
+    grid-column: 2/5;
+    background-color: #0406D3;
+    border-radius: 15px;
+    color: white;
+    font-size: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 5px;
+    align-items: center;
+    justify-self: center;
+    text-align: center;
+    line-height: 20px;
+    width: 100%;
+    height: 40px;
+}
+
+/*------------------------------------LEFT BAR----------------------------*/
+
+#status {
+    grid-column: 2/3;
+    grid-row: 2/3;
+    height: 800px;
+    background-color: dimgrey;
+    border-radius: 15px;
+    text-align: center;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    align-items: start;
+    justify-items: center;
+}
+
+.border {
+    border-radius: 15px;
+    border: solid 2px #0406D3;
+    display: grid;
+    row-gap: 10px;
+    grid-template-columns: 1fr;
+    padding: 5px;
+    width: 100%;
+}
+
+.setup {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 5px;
+    align-items: center;
+    justify-self: center;
+    text-align: center;
+}
+
+.setup cite {
+    grid-column: 1/3;
+}
+/*------------------------------------CHAT----------------------------*/
+#chat {
+    grid-column: 4/5;
+    height: 800px;
+    background-color: dimgrey;
+    border-radius: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 5fr 1fr;
+}
+#keyboard {
+    grid-row: 2/3;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    gap: 0;
+}
+
+/*------------------------------------GAME----------------------------*/
+
+#game {
+    grid-column: 3/4;
+    height: 700px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+}
+
+#game p {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    justify-items: center;
+    align-items: center;
+    row-gap: 0;
+    column-gap: 0;
+    width: 385px;
+    height: 385px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cell {
+    max-height: 40px;
+    max-width: 40px;
+    background-color: #0406D3;
+    border: solid 1px black;
+    text-align: center;
+    line-height: 30px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.cell:hover{
+    opacity: 0.8;
+}
+
+.white {
+    background-color: white;
+    cursor: auto;
+}
+
+.white:hover {
+    opacity: 1;
+}
+
+.green {
+    background-color: #4dff4d;
+}
+
+.hit {
+    background-color: #ff4d4d;
+}
+
+.navy {
+    background-color: dimgrey;
+}
+
+.orange {
+    background-color: darkorange;
+}
+
+
+

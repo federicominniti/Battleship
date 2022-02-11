@@ -24,7 +24,7 @@ public class Game extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
-        String opponent = request.getParameter("opponent");
+        /*String opponent = request.getParameter("opponentUsername");
 
         if (opponent == null) {
             response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
@@ -34,6 +34,8 @@ public class Game extends HttpServlet {
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
             response.setDateHeader("Expires", -1);
             dispatcher.include(request, response);
-        }
+        }*/
+
+        response.sendRedirect(request.getContextPath() + "/pages/game.jsp");
     }
 }
