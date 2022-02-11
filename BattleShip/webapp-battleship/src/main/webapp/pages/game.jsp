@@ -18,7 +18,7 @@
         <header id="game-info">
             <label id="phase">SET YOUR GRID</label>
             <p>TIMER</p>
-            <button disabled>READY</button>
+            <button id="ready" disabled>READY</button>
             <button>SURRENDER</button>
         </header>
 
@@ -33,6 +33,7 @@
 
         <div id="status">
             <cite>Your Navy</cite>
+            <button id="back" onclick="goBack()" disabled>BACK</button>
             <div class="border">
                 <div class="setup">
                     <cite>SHORT-SHIPS</cite>
