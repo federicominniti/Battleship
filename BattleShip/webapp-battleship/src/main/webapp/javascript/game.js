@@ -1,8 +1,7 @@
 class Ship {
-    constructor(id, coordinates, orientation) {
+    constructor(id, coordinates) {
         this.id = id;
         this.coordinates = coordinates;
-        this.orientation = orientation;
     }
 }
 

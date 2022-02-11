@@ -1,6 +1,3 @@
-
-
-
 function createGrid(owner, target) {
     let grid = document.getElementById(target);
     for (let i = 0; i < 11; i++) {
@@ -23,35 +20,6 @@ function createGrid(owner, target) {
             }
             grid.appendChild(cell);
         }
-    }
-}
-
-function cellParser(id) {
-    let vect = id.split("-");
-    return {
-        grid: vect[0],
-        row: parseInt(vect[1]),
-        col: parseInt(vect[2])
-    };
-}
-
-function createId(grid, row, column) {
-    return grid.concat("-", row, "-", column);
-}
-
-function disabledTable() {
-    let cells = document.getElementsByClassName("cell std");
-    for (let i = 0; i < cells.length; i++) {
-        cells[i].setAttribute("onclick", "null");
-    }
-}
-
-function enableTable() {
-    let cells = document.getElementsByClassName("cell std");
-    for (let i = 0; i < cells.length; i++) {
-        let id = cells[i].getAttribute("id");
-        cells[i].setAttribute("onclick", "null");
-        cells[i].setAttribute("onclick", "cellInteraction('" + id + "')");
     }
 }
 
@@ -92,6 +60,7 @@ function controlPlacement(len, direction, target) {
     }
 }
 
+
 function cellInteraction(id) {
     switch (game.gameStatus){
         case "loading":
@@ -122,6 +91,7 @@ function cellInteraction(id) {
             return;
     }
 }
+
 
 function undoSelect(id) {
     let target = cellParser(id);
@@ -166,24 +136,19 @@ function chooseShip(id, direction, len) {
     let target = cellParser(id);
     let counter = 0;
     let cell = document.getElementById(id);
-    let orientation;
     while (true) {
         switch (direction) {
             case "left":
                 cell = document.getElementById(createId(target.grid, target.row + counter, target.col));
-                orientation = "horizontal";
                 break;
             case "right":
                 cell = document.getElementById(createId(target.grid, target.row - counter, target.col));
-                orientation = "horizontal";
                 break;
             case "top":
                 cell = document.getElementById(createId(target.grid, target.row, target.col - counter));
-                orientation = "vertical";
                 break;
             case "bottom":
                 cell = document.getElementById(createId(target.grid, target.row, target.col + counter));
-                orientation = "vertical";
                 break;
         }
         let cellClass = cell.getAttribute("class");
@@ -201,7 +166,7 @@ function chooseShip(id, direction, len) {
     }
     let shipLen = parseInt(len) + 1;
     document.getElementById("place".concat(shipLen)).textContent++;
-    let ship = new Ship(game.getShipId(), coordinatesArray, orientation)
+    let ship = new Ship(game.getShipId(), coordinatesArray)
     game.addShip(ship);
     document.getElementById("back").disabled = false
     // clean orange (undo select with the green)
@@ -209,22 +174,34 @@ function chooseShip(id, direction, len) {
     cell.setAttribute("class", "cell navy");
     cell.setAttribute("onclick", null);
     checkReady()
-
 }
 
+// -------------------------UTILITY------------------------
 
-function checkReady() {
-    for (let i = 2; i <= 5; i++) {
-        let num = document.getElementById("place".concat(i)).textContent;
-        if (num != 5-i+1)
-            return;
+// convert coordinates to id
+function createId(grid, row, column) {
+    return grid.concat("-", row, "-", column);
+}
+
+// remove all onclick events from the grid
+function disabledTable() {
+    let cells = document.getElementsByClassName("cell std");
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].setAttribute("onclick", "null");
     }
-    disabledTable();
-    document.getElementById("ready").disabled = false;
-
 }
 
+// restore all onclick events od the cells in the grid
+function enableTable() {
+    let cells = document.getElementsByClassName("cell std");
+    for (let i = 0; i < cells.length; i++) {
+        let id = cells[i].getAttribute("id");
+        cells[i].setAttribute("onclick", "null");
+        cells[i].setAttribute("onclick", "cellInteraction('" + id + "')");
+    }
+}
 
+// remove the last ship insert
 function goBack() {
     let ship = game.deleteShip();
     document.getElementById("place".concat(ship.coordinates.length)).textContent--;
@@ -240,4 +217,24 @@ function goBack() {
     enableTable();
     if (game.countShips == 0)
         document.getElementById("back").disabled = true;
+}
+
+// check if the user has inserted all ships
+function checkReady() {
+    for (let i = 2; i <= 5; i++) {
+        let num = document.getElementById("place".concat(i)).textContent;
+        if (num != 5-i+1)
+            return;
+    }
+    disabledTable();
+    document.getElementById("ready").disabled = false;
+}
+
+function cellParser(id) {
+    let vect = id.split("-");
+    return {
+        grid: vect[0],
+        row: parseInt(vect[1]),
+        col: parseInt(vect[2])
+    };
 }
