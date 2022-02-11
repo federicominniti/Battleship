@@ -1,7 +1,7 @@
-/Users/federicom98/Desktop/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/Endgame.java
-/Users/federicom98/Desktop/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/IndexServlet.java
-/Users/federicom98/Desktop/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/LogoutServlet.java
-/Users/federicom98/Desktop/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/Game.java
-/Users/federicom98/Desktop/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/filter/AuthFilter.java
-/Users/federicom98/Desktop/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/config/Config.java
-/Users/federicom98/Desktop/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/filter/IndexServletFilter.java
+/Users/tom/IdeaProjects/Battleship/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/config/Config.java
+/Users/tom/IdeaProjects/Battleship/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/IndexServlet.java
+/Users/tom/IdeaProjects/Battleship/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/Endgame.java
+/Users/tom/IdeaProjects/Battleship/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/filter/AuthFilter.java
+/Users/tom/IdeaProjects/Battleship/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/LogoutServlet.java
+/Users/tom/IdeaProjects/Battleship/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/servlet/Game.java
+/Users/tom/IdeaProjects/Battleship/Battleship/BattleShip/webapp-battleship/src/main/java/it/unipi/dii/inginf/dsmt/battleship/filter/IndexServletFilter.java

@@ -1,41 +1,93 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: tom
-  Date: 09/02/22
-  Time: 15:21
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="./../images/battleship_icon.png"/>
+    <link rel="icon" type="./../image/png" href="./../images/battleship_icon.png"/>
     <link href="./../css/game.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../javascript/gameController.js"></script>
+    <script type="text/javascript" src="../javascript/game.js"></script>
     <title>Battleship - Game</title>
 </head>
 <body>
-    <header>
+    <script>
+        const game = new Game(5000, 5000);
+    </script>
 
-    </header>
+    <div id="container">
+        <header id="game-info">
+            <label id="phase">SET YOUR GRID</label>
+            <p>TIMER</p>
+            <button disabled>READY</button>
+            <button>SURRENDER</button>
+        </header>
 
-    <div id="game">
-        <div id="my-ground">
-
+        <div id="game">
+            <p>OPPONENT GROUND</p>
+            <div class="grid" id="my-ground">
+            </div>
+            <p>YOUR GROUND</p>
+            <div class="grid" id="enemy-ground">
+            </div>
         </div>
-        <div id="enemy-ground">
 
+        <div id="status">
+            <cite>Your Navy</cite>
+            <div class="border">
+                <div class="setup">
+                    <cite>SHORT-SHIPS</cite>
+                    <label id="place2">0</label><label>/4</label>
+                </div>
+                <div class="setup">
+                    <cite>SUBMARINES</cite>
+                    <label id="place3">0</label><label>/3</label>
+                </div>
+                <div class="setup">
+                    <cite>MEDIUM-SHIPS</cite>
+                    <label id="place4">0</label><label>/2</label>
+                </div>
+                <div class="setup">
+                    <cite>MOTHER-SHIP</cite>
+                    <label id="place5">0</label><label>/1</label>
+                </div>
+            </div>
+            <cite>Enemy Navy</cite>
+            <div class="border">
+                <div class="setup">
+                    <cite>SHORT-SHIPS</cite>
+                    <label id="enemy2">2</label><label>/4</label>
+                </div>
+                <div class="setup">
+                    <cite>SUBMARINES</cite>
+                    <label id="enemy3">3</label><label>/3</label>
+                </div>
+                <div class="setup">
+                    <cite>MEDIUM-SHIPS</cite>
+                    <label id="enemy4">2</label><label>/2</label>
+                </div>
+                <div class="setup">
+                    <cite>MOTHER-SHIP</cite>
+                    <label id="enemy5">1</label><label>/1</label>
+                </div>
+            </div>
+        </div>
+
+        <div id="chat">
+            <div id="list-message">
+            </div>
+            <div id="keyboard">
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+                <button disabled>SEND</button>
+            </div>
         </div>
     </div>
-    <div id="status"></div>
 
-    <div id="chat">
-        <div id="list-message">
-
-        </div>
-        <div id="keyboard">
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-            <button disabled>SEND</button>
-        </div>
-    </div>
+    <script>
+        window.onload = () => {
+            createGrid('enemy', 'my-ground');
+            createGrid('your', 'enemy-ground');
+        }
+    </script>
+    <!--<script src="./../javascript/webSocket.js"></script>-->
 </body>
 </html>

@@ -94,6 +94,7 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         return dto;
     }
 
+    @Override
     public void saveGame(UserDTO dto, boolean winOrLoss) {
         Query query;
         if (winOrLoss) {
