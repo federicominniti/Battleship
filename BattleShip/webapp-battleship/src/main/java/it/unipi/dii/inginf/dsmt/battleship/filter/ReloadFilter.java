@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebFilter(filterName = "AuthFilter", urlPatterns = {"/pages/homepage.jsp"})
+@WebFilter(filterName = "ReloadFilter", urlPatterns = {"/pages/homepage.jsp"})
 public class ReloadFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

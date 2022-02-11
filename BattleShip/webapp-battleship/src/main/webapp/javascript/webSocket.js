@@ -10,34 +10,36 @@ class Message {
     }
 }
 
-var ws = new Object;
+let webSocket = new Object;
 if (!("WebSocket" in window)) {
     alert("Please change your browser because it don't support Battleship application");
 }
 
 function initWebSocket(username) {
-    ws = new WebSocket("ws://localhost:8090/ws/battleship");
-    ws.onopen = function (event) {
-        console.log('Connected with the messages server');
-        // At the beginning, send a message for registering the username
-        ws.send(JSON.stringify(new Message("user_online", username, username, null)));
+    webSocket = new WebSocket("ws://localhost:8090/ws/battleship");
+    webSocket.onopen = function (event) {
+        //if(numReloads == 0) {
+            console.log('Connected with the messages server');
+            // At the beginning, send a message for registering the username
+            webSocket.send(JSON.stringify(new Message("user_online", username, username, null)));
+        //}
     };
-    ws.onmessage = function (event) {
+    webSocket.onmessage = function (event) {
         console.log(event.data);
     }
-    ws.onclose = function () {
+    webSocket.onclose = function () {
         console.log('Disconnected by the messages server');
     };
 }
 
 function sendWebSocket(message) {
     let jsonMessage = JSON.stringify(message);
-    ws.send(jsonMessage);
+    webSocket.send(jsonMessage);
     console.log('Client send [' + jsonMessage + '] on the websocket');
 }
 
 function closeWebSocket() {
-    ws.close();
+    webSocket.close();
 }
 
 function waitForSocketConnection(socket, callback) {

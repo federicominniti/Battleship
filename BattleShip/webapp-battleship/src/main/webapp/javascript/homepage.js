@@ -10,47 +10,13 @@ initWebSocket(username);
 //------------------------
 
 //@Override from webSocket.js
-ws.onmessage = function (event){
-    var jsonString = JSON.parse(event.data);
-    var sender = jsonString.sender;
+webSocket.onmessage = function (event){
+    let jsonString = JSON.parse(event.data);
+    let sender = jsonString.sender;
     console.log("Message received from the message server");
 
     if (jsonString.type === 'battleship_request') {
-        let container = document.getElementById("received-request");
-        let table;
-        if (container.getElementsByTagName("table")[0] != null){
-            table = container.getElementsByTagName("table")[0];
-        }else{
-            table = document.createElement("table");
-            container.appendChild(table);
-        }
-
-        /*for(let step = table.childNodes.length - 1; step > 1; step--) {
-            let tr = table.childNodes.item(step);
-            let td = tr.firstChild;
-
-            // Duplicated request
-            if(td.textContent === sender) {
-                return;
-            }
-        }*/
-
-        // Otherwise, the game request is added to the list
-        let tr = document.createElement("tr");
-
-        let tdText = document.createElement("td");
-        tdText.textContent = sender;
-        tr.appendChild(tdText);
-
-        let button = document.createElement("button");
-        button.textContent = "Accept";
-        button.onclick = function() { acceptRequest(sender); }
-
-        let tdButton = document.createElement("td");
-        tdButton.appendChild(button);
-        tr.appendChild(tdButton);
-
-        table.appendChild(tr);
+        addPossibleOpponent(sender);
     }
     else if (jsonString.type === 'battleship_accepted') { // My opponent has accepted my game request
         // If my opponent accepted a game request for a game that is not
@@ -111,7 +77,7 @@ function acceptRequest (opponent) {
 }
 
 function sendRequestForAGame(possibleOpponent) {
-    sendWebSocket(new Message('battleship_request', null, username, possibleOpponent))
+    sendWebSocket(new Message('battleship_request', null, username, possibleOpponent));
 }
 
 function removeOnClick(element){
@@ -134,3 +100,77 @@ function startBattleship(opponent){
     document.body.appendChild(hiddenForm);
     hiddenForm.submit();
 }
+
+function refreshPage(){
+    if(numReloads != 0) {
+        let users = window.sessionStorage.getItem("opponentRequests");
+        if (users != null) {
+            for (let i = 0; i < users.length; i++) {
+                addPossibleOpponent(users[i]);
+            }
+        }
+    }
+}
+
+function saveDataAndQuit() {
+    if (numReloads != 0){
+        let container = document.getElementById("received-request");
+        let table;
+        if (container.getElementsByTagName("table")[0] != null) {
+            table = container.getElementsByTagName("table")[0];
+            let users = null;
+            for (let i = 0; i < table.childNodes.length; i++) {
+                users.push(table.childNodes.item(i).textContent);
+            }
+            window.sessionStorage.setItem("opponentRequests", users);
+        }
+        closeWebSocket();
+        document.location.href = './../paginaDiCaricamentoDaFare';
+    }
+}
+
+function addPossibleOpponent(sender){
+    let container = document.getElementById("received-request");
+    let table;
+    if (container.getElementsByTagName("table")[0] != null){
+        table = container.getElementsByTagName("table")[0];
+    }else{
+        table = document.createElement("table");
+        container.appendChild(table);
+    }
+
+    /*for(let step = table.childNodes.length - 1; step > 1; step--) {
+        let tr = table.childNodes.item(step);
+        let td = tr.firstChild;
+
+        // Duplicated request
+        if(td.textContent === sender) {
+            return;
+        }
+    }*/
+
+    // Otherwise, the game request is added to the list
+    let tr = document.createElement("tr");
+
+    let tdText = document.createElement("td");
+    tdText.textContent = sender;
+    tr.appendChild(tdText);
+
+    let button = document.createElement("button");
+    button.textContent = "Accept";
+    button.onclick = function() { acceptRequest(sender); }
+
+    let tdButton = document.createElement("td");
+    tdButton.appendChild(button);
+    tr.appendChild(tdButton);
+
+    table.appendChild(tr);
+}
+
+/*function confirmLeave() {
+    if(numReloads != 0)
+        if (confirm('Are you sure you want to leave the page? If you leave the page your session will terminate and you will have to log in again') == true) {
+            closeWebSocket();
+            document.location.href = './../logout';
+        }
+}*/
