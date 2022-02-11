@@ -85,11 +85,44 @@ body{
 #chat {
     grid-column: 4/5;
     height: 800px;
-    background-color: dimgrey;
+    background-color: lightblue;
     border-radius: 15px;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 5fr 1fr;
+}
+
+#list-message {
+    height: 641px;
+    overflow-y: scroll;
+}
+
+#list-message .user-msg {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5px;
+    color: white;
+    max-width: 150px;
+    background-color: fuchsia;
+    font-size: 0.7em;
+    padding: 10px 10px 10px 12px;
+    border-radius: 20px;
+    white-space: normal;
+    word-break: break-word;
+    float: left;
+}
+
+#list-message .opponent-msg {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5px;
+    color: white;
+    background-color: blue;
+    max-width: 150px;
+    font-size: 0.7em;
+    padding: 10px 10px 10px 12px;
+    border-radius: 20px;
+    float: right;
 }
 #keyboard {
     grid-row: 2/3;
