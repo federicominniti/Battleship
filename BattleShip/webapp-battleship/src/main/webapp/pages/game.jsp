@@ -1,4 +1,4 @@
-
+<%@ page import="it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,84 +8,91 @@
     <script type="text/javascript" src="../javascript/gameController.js"></script>
     <script type="text/javascript" src="../javascript/game.js"></script>
     <script type="text/javascript" src="../javascript/chat.js" defer></script>
-    <script type="text/javascript">
-        <% UserDTO loggedUser = (UserDTO) session.getAttribute("loggedUser");
-            String loggedUsername = loggedUser.getUsername(); %>
-        let loggedUser = '<%= loggedUsername %>';
-        let opponent = '<%= request.getAttribute("opponentUsername")%>';
-    </script>
     <title>Battleship - Game</title>
 </head>
 <body>
+<%
+    UserDTO loggedUser = (UserDTO) session.getAttribute("loggedUser");
+    String  opponent = (String) request.getAttribute("opponentUsername");
+    String loggedUsername = loggedUser.getUsername();
+%>
     <script>
+        const loggedUser = '<%= loggedUsername %>';
+        const opponent = '<%=opponent%>';
         const game = new Game(5000, 5000);
     </script>
 
     <div id="container">
         <header id="game-info">
-            <label id="phase">SET YOUR GRID</label>
-            <p>TIMER</p>
-            <button id="ready" disabled>READY</button>
-            <button>SURRENDER</button>
+            <div>
+                <cite>Game phase:</cite>
+                <label id="phase">SET YOUR GRID</label>
+            </div>
+            <div>
+                <cite>TIMER</cite>
+                <p id="timer"></p>
+            </div>
         </header>
 
         <div id="game">
-            <p>OPPONENT GROUND</p>
+            <p><%=opponent%> GROUND</p>
             <div class="grid" id="my-ground">
             </div>
-            <p>YOUR GROUND</p>
+            <br>
+            <p><%=loggedUsername%> GROUND</p>
             <div class="grid" id="enemy-ground">
             </div>
         </div>
 
         <div id="status">
-            <cite>Your Navy</cite>
+            <button id="ready" disabled>READY</button>
+            <button>SURRENDER</button>
             <button id="back" onclick="goBack()" disabled>BACK</button>
+            <cite>Your Navy</cite>
             <div class="border">
                 <div class="setup">
                     <cite>SHORT-SHIPS</cite>
-                    <label id="place2">0</label><label>/4</label>
+                    <span><label id="place2">0</label><label>/4</label></span>
                 </div>
                 <div class="setup">
                     <cite>SUBMARINES</cite>
-                    <label id="place3">0</label><label>/3</label>
+                    <span><label id="place3">0</label><label>/3</label></span>
                 </div>
                 <div class="setup">
                     <cite>MEDIUM-SHIPS</cite>
-                    <label id="place4">0</label><label>/2</label>
+                    <span><label id="place4">0</label><label>/2</label></span>
                 </div>
                 <div class="setup">
                     <cite>MOTHER-SHIP</cite>
-                    <label id="place5">0</label><label>/1</label>
+                    <span><label id="place5">0</label><label>/1</label></span>
                 </div>
             </div>
             <cite>Enemy Navy</cite>
             <div class="border">
                 <div class="setup">
                     <cite>SHORT-SHIPS</cite>
-                    <label id="enemy2">2</label><label>/4</label>
+                    <span><label id="enemy2">4</label><label>/4</label></span>
                 </div>
                 <div class="setup">
                     <cite>SUBMARINES</cite>
-                    <label id="enemy3">3</label><label>/3</label>
+                    <span><label id="enemy3">3</label><label>/3</label></span>
                 </div>
                 <div class="setup">
                     <cite>MEDIUM-SHIPS</cite>
-                    <label id="enemy4">2</label><label>/2</label>
+                    <span><label id="enemy4">2</label><label>/2</label></span>
                 </div>
                 <div class="setup">
                     <cite>MOTHER-SHIP</cite>
-                    <label id="enemy5">1</label><label>/1</label>
+                    <span><label id="enemy5">1</label><label>/1</label></span>
                 </div>
             </div>
         </div>
 
         <div id="chat">
-            <div id="list-message">
-            </div>
+            <div id="list-message"></div>
             <div id="keyboard">
-                <textarea name="" id="message" cols="30" rows="10"></textarea>
-                <button id="sendMsgButton">SEND</button>
+                <input id="text" type="input" maxlength="100" placeholder="Type here...">
+                <button id="sendButton" onclick="sendMessage()">SEND</button>
             </div>
         </div>
     </div>

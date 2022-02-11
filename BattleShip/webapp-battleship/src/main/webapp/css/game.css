@@ -11,7 +11,7 @@ body{
 
 #container{
     display: grid;
-    grid-template-columns: 1fr 2fr 5fr 2fr 1fr;
+    grid-template-columns: 1fr 5fr 5fr 5fr 1fr;
     grid-auto-rows: minmax(20px, auto);
     grid-gap: 10px;
     margin: 0;
@@ -23,22 +23,33 @@ body{
 }
 /*------------------------------------TOP BAR----------------------------*/
 
+
 #game-info {
     padding: 10px;
     grid-column: 2/5;
     background-color: #0406D3;
     border-radius: 15px;
     color: white;
-    font-size: 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    column-gap: 5px;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-self: center;
     text-align: center;
-    line-height: 20px;
     width: 100%;
+    column-gap: 100px;
+}
+
+
+#game-info div {
+    border-radius: 5px;
+    background-color: darkorange;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    align-items: center;
+    row-gap: 10px;
     height: 40px;
+    padding: 10px;
 }
 
 /*------------------------------------LEFT BAR----------------------------*/
@@ -46,8 +57,7 @@ body{
 #status {
     grid-column: 2/3;
     grid-row: 2/3;
-    height: 800px;
-    background-color: dimgrey;
+    height: 600px;
     border-radius: 15px;
     text-align: center;
     padding: 20px;
@@ -56,11 +66,34 @@ body{
     gap: 10px;
     align-items: start;
     justify-items: center;
+    width: 100%;
+}
+
+#status button {
+    transition-duration: 0.4s;
+    font-size: 22px;
+    background-color: darkorange;
+    color: white;
+    border: 2px solid darkorange;
+    border-radius: 5px;
+    width: 60%;
+    height: 50px;
+}
+
+#status button:hover {
+    background-color: white;
+    font-size: 22px;
+    color: darkorange;
+    cursor: pointer;
+}
+
+#status button:disabled {
+    opacity: 0;
 }
 
 .border {
     border-radius: 15px;
-    border: solid 2px #0406D3;
+    border: solid 3px #0406D3;
     display: grid;
     row-gap: 10px;
     grid-template-columns: 1fr;
@@ -68,74 +101,120 @@ body{
     width: 100%;
 }
 
+#status cite {
+    font-size: 26px;
+    color: black;
+}
+
 .setup {
     display: grid;
     width: 100%;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     column-gap: 5px;
     align-items: center;
     justify-self: center;
     text-align: center;
+    font-weight: bold;
+    font-size: 18px;
 }
 
-.setup cite {
-    grid-column: 1/3;
-}
 /*------------------------------------CHAT----------------------------*/
 #chat {
     grid-column: 4/5;
-    height: 800px;
-    background-color: lightblue;
+    height: 725px;
+    border: solid #0406D3 3px;
     border-radius: 15px;
+    padding: 10px;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 5fr 1fr;
+    align-items: end;
+    width: 100%;
 }
 
 #list-message {
-    height: 641px;
-    overflow-y: scroll;
+    max-height: 680px;
+    height: 680px;
+    /*overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr;*/
+    position: relative;
+    overflow: auto;
+    align-items: end;
+    row-gap: 5px;
+}
+
+#list-message * {
+    color: white;
+    height: auto;
+    width: fit-content;
+    max-width: 80%;
+    border-radius: 10px;
+    word-break: break-word;
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 5px;
+    clear: both;
 }
 
 #list-message .user-msg {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 5px;
-    color: white;
-    max-width: 150px;
-    background-color: fuchsia;
-    font-size: 0.7em;
-    padding: 10px 10px 10px 12px;
-    border-radius: 20px;
-    white-space: normal;
-    word-break: break-word;
+    justify-self: start;
     float: left;
+
+    background-color: lightgreen;
+    text-align: start;
 }
 
 #list-message .opponent-msg {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 5px;
-    color: white;
-    background-color: blue;
-    max-width: 150px;
-    font-size: 0.7em;
-    padding: 10px 10px 10px 12px;
-    border-radius: 20px;
+    justify-self: end;
     float: right;
+    background-color: lightcoral;
+    text-align: end;
 }
+
 #keyboard {
-    grid-row: 2/3;
+    height: 30px;
     display: grid;
     grid-template-columns: 4fr 1fr;
     gap: 0;
 }
 
+#keyboard input {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: 0;
+    margin: 0;
+    padding: 3px;
+    font-size: 16px;
+}
+
+#keyboard button {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius-radius: 5px;
+    border: 0;
+    margin: 0;
+    font-size: 16px;
+}
+
+#keyboard input:focus {
+    outline: none;
+}
+
+#keyboard button{
+    transition-duration: 0.4s;
+    background-color: #4dff4d;
+    color: white;
+    border: 2px solid #4dff4d;
+}
+#keyboard button:hover {
+    background-color: white;
+    color: #4dff4d;
+    cursor: pointer;
+}
 /*------------------------------------GAME----------------------------*/
 
 #game {
     grid-column: 3/4;
-    height: 700px;
+    height: 600px;
     grid-template-columns: 1fr;
     justify-items: center;
     align-items: center;
@@ -155,19 +234,19 @@ body{
     align-items: center;
     row-gap: 0;
     column-gap: 0;
-    width: 385px;
-    height: 385px;
+    width: 280px;
+    height: 280px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .cell {
-    max-height: 40px;
-    max-width: 40px;
+    max-height: 30px;
+    max-width: 30px;
     background-color: #0406D3;
     border: solid 1px black;
     text-align: center;
-    line-height: 30px;
+    line-height: 25px;
     width: 100%;
     height: 100%;
     margin: 0;

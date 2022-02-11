@@ -1,25 +1,21 @@
-let chatBox = document.getElementById("list-message");
-let sendMsgBtn = document.getElementById("sendMsgButton");
-sendMsgBtn.onclick = function () {
-    sendMessage();
-}
-
 function sendMessage() {
-    let msg = document.getElementById("message");
-    let btn = document.getElementById("sendMsgButton");
 
-    if (msg !== "") {
-        if (msg.value.length > 100)
-            return;
+    let input = document.getElementById("text");
+    let btn = document.getElementById("sendButton");
 
-        btn.disabled = true;
-        //let msgForErlang = new Message("chat_message", msg.value, loggedUser , opponent);
-        sleep(500).then(r => {
-            //sendWebSocket(msgForErlang);
-            createMessageElem(msg.value, true);
-            btn.disabled = false;
-        });
-    }
+    let msg = input.value;
+    if (msg === "")
+        return;
+
+    // TODO erlang stuff to add (why sleep?)
+    btn.disabled = true;
+    //let msgForErlang = new Message("chat_message", msg.value, loggedUser , opponent);
+    sleep(500).then(r => {
+        //sendWebSocket(msgForErlang);
+        createMessageElem(msg, true);
+        btn.disabled = false;
+    });
+    input.value = "";
 }
 
 function sleep(ms) {
@@ -33,8 +29,10 @@ function createMessageElem(message, isMsgMine) {
     else
         msgDiv.className = "opponent-msg";
 
-    msgDiv.innerHTML = message;
-    chatBox.appendChild(msgDiv);
+    msgDiv.textContent = message;
+    let container = document.getElementById("list-message");
+    //container.insertBefore(msgDiv, container.lastChild);
+    container.appendChild(msgDiv);
 }
 
 function acceptMessage(message) {

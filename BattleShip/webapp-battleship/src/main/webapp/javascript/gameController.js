@@ -215,7 +215,7 @@ function goBack() {
     delete ship;
     document.getElementById("ready").disabled = true;
     enableTable();
-    if (game.countShips == 0)
+    if (game.countShips === 0)
         document.getElementById("back").disabled = true;
 }
 
