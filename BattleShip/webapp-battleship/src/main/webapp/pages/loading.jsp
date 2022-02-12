@@ -7,6 +7,7 @@
 </head>
 <body>
   <img style="display: block;
+                margin-top: 200px;
                 margin-left: auto;
                 margin-right: auto;
                 width: 200px;" src="../images/loading.gif" alt="loading...">
