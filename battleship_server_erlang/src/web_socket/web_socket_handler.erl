@@ -101,11 +101,16 @@ terminate (TerminateReason, _Req, {opponent_username, OpponentUsername}) ->
   end;
 
 %% In case of termination in a waiting room
-terminate (TerminateReason, _Req, {waiting_room, State}) ->
-  Name = element(2, erlang:process_info(self(), registered_name)),
-  online_users ! {Name, remove},
+terminate (TerminateReason, _Req, {waiting_opponent, State}) ->
+  % Name = element(2, erlang:process_info(self(), registered_name)),
+  ProcessInfo = process_info(self(), registered_name),
+  NameProcess = element(2, ProcessInfo),
+  io:format("I AM: ~s ", [NameProcess]),
+  online_users ! {NameProcess, {update_online_user, remove}},
   io:format("Terminate reason: ~p\n", [TerminateReason]);
 
 terminate (TerminateReason, _Req, {}) ->
   io:format("Terminate reason: ~p\n", [TerminateReason]),
   io:format("Terminate with empty state ~n").
+
+%% TODO -> remove player that are playing from online users

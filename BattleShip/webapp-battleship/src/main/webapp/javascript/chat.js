@@ -9,12 +9,12 @@ function sendMessage() {
 
     // TODO erlang stuff to add (why sleep?)
     btn.disabled = true;
-    //let msgForErlang = new Message("chat_message", msg.value, loggedUser , opponent);
-    sleep(500).then(r => {
-        //sendWebSocket(msgForErlang);
+    let msgForErlang = new Message("chat_message", msg, loggedUser , opponent);
+    //sleep(500).then(r => {
+        sendWebSocket(msgForErlang);
         createMessageElem(msg, true);
         btn.disabled = false;
-    });
+    //});
     input.value = "";
 }
 

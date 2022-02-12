@@ -1,3 +1,94 @@
+//-------------------------WEB SOCKET -----------------------------
+
+initWebSocket(loggedUser);
+waitForSocketConnection(webSocket,function() {
+    sendWebSocket(new Message("opponent_registration", opponent, loggedUser, null));
+});
+
+// RECEIVE
+webSocket.onmessage = function (event) {
+    let jsonString = JSON.parse(event.data);
+    //let sender = jsonString.sender;
+
+    if (jsonString.type === "chat_message") {
+        acceptMessage(jsonString.data);
+    } else {
+        let coordinate;
+        switch (jsonString.type) {
+            case "ready":
+                game.receivedRandom = parseInt(jsonString.data);
+                if (game.myRandom !== 0){
+                    if (parseInt(jsonString.data) < game.myRandom)
+                        updateStatus("play");
+                    else
+                        updateStatus("idle");
+                }
+                break;
+            case "shoot":
+                // take the cell id
+                coordinate = jsonString.data.split("-");
+                let targetCellId = createId("your", coordinate[0], coordinate[1]);
+                let shipId = document.getElementById(targetCellId).textContent;
+                let message;
+                if (shipId === "" || shipId === null) { // miss
+                    message = new Message("miss", jsonString.data, loggedUser, opponent);
+                    missCell("your", coordinate[0], coordinate[1]);
+                    sendWebSocket(message);
+                } else {    // hit or sunk
+                    let result = game.checkShoot(shipId);
+                    if (result === "hit") {
+                        hitCell("your", coordinate[0], coordinate[1]);
+                        message = new Message("hit", jsonString.data, loggedUser, opponent);
+                        sendWebSocket(message);
+                    } else {
+                        let info = jsonString.data.concat("_", result);
+                        document.getElementById("place".concat(result)).textContent--;
+                        message = new Message("sunk", info, loggedUser, opponent);
+                        sendWebSocket(message);
+                        checkEndGame("lose");
+                    }
+                }
+                updateStatus("play");
+                break;
+            case "miss":
+                coordinate = jsonString.data.split("-");
+                missCell("enemy", coordinate[0], coordinate[1]);
+                updateStatus("idle")
+                break;
+            case "hit":
+                coordinate = jsonString.data.split("-");
+                hitCell("enemy", coordinate[0], coordinate[1]);
+                updateStatus("idle");
+                break;
+            case "sunk":
+                let info = jsonString.data.split("_");
+                document.getElementById("enemy".concat(info[1])).textContent--;
+                coordinate = info[0].split("-");
+                hitCell("enemy", coordinate[0], coordinate[1]);
+                updateStatus("idle");
+                checkEndGame("win");
+                break;
+        }
+    }
+}
+
+function sendReady() {
+    document.getElementById("ready").disabled = true;
+    document.getElementById("back").disabled = true;
+    game.myRandom = getRandomInt(10000);
+    let message = new Message("ready", game.myRandom, loggedUser, opponent);
+    sendWebSocket(message);
+    if (game.receivedRandom !==0) {
+        if (game.receivedRandom < game.myRandom) {
+            updateStatus("play");
+        } else {
+            updateStatus("idle");
+        }
+    } else
+        updateStatus("idle");
+}
+
+// ---------------------------------GAME CONTROLLER-------------------
 function createGrid(owner, target) {
     let grid = document.getElementById(target);
     for (let i = 0; i < 11; i++) {
@@ -81,11 +172,15 @@ function cellInteraction(id) {
             }
             startCell.setAttribute("class", "cell green");
             startCell.setAttribute("onclick", "undoSelect('" + id + "')");
-            disabledTable();
+            disabledTable("your");
             return;
         case "idle":
             return;
         case "play":
+            let coordiante = cellParser(id);
+            let message = new Message("shoot", coordiante.row + "-" + coordiante.col, loggedUser, opponent);
+            sendWebSocket(message);
+            updateStatus("idle");
             return;
         default:
             return;
@@ -176,7 +271,54 @@ function chooseShip(id, direction, len) {
     checkReady()
 }
 
+function checkEndGame(status) {
+    let counter;
+    for (let i = 2; i <= 5; i++) {
+        if (status === "lose")
+            counter = document.getElementById("place".concat(i)).textContent;
+        else
+            counter = document.getElementById("enemy".concat(i)).textContent;
+        if (counter !== 0)
+            return;
+    }
+    closeWebSocket();
+    let hiddenForm = document.createElement("form");
+    hiddenForm.setAttribute('method',"post");
+    hiddenForm.setAttribute('action',"endgame");
+
+    let result = document.createElement("input");
+    result.setAttribute('type',"text");
+    result.setAttribute('name', "result");
+    result.setAttribute('value', status);
+
+    hiddenForm.appendChild(result);
+    hiddenForm.style.visibility = "hidden";
+    document.body.appendChild(hiddenForm);
+    hiddenForm.submit();
+}
+
+
 // -------------------------UTILITY------------------------
+// change the status of a cell
+function hitCell(grid, row, col) {
+    let cellId = createId(grid, row, col);
+    let cell = document.getElementById(cellId);
+    cell.setAttribute("class", "cell hit");
+    cell.setAttribute("onclick", "null");
+}
+
+function missCell(grid, row, col) {
+    let cellId = createId(grid, row, col);
+    let cell = document.getElementById(cellId);
+    cell.setAttribute("class", "cell miss");
+    cell.setAttribute("onclick", "null");
+}
+
+function checkHitCell(grid, row, col) {
+    let cellId = createId(grid, row, col);
+    let cell = document.getElementById(cellId);
+    return cell.className === "cell hit";
+}
 
 // convert coordinates to id
 function createId(grid, row, column) {
@@ -184,10 +326,11 @@ function createId(grid, row, column) {
 }
 
 // remove all onclick events from the grid
-function disabledTable() {
+function disabledTable(grid) {
     let cells = document.getElementsByClassName("cell std");
     for (let i = 0; i < cells.length; i++) {
-        cells[i].setAttribute("onclick", "null");
+        if (cells[i].id.split("-")[0] === grid)
+            cells[i].setAttribute("onclick", "null");
     }
 }
 
@@ -212,7 +355,6 @@ function goBack() {
         cell.setAttribute("class", "cell std");
         cell.textContent = "";
     }
-    delete ship;
     document.getElementById("ready").disabled = true;
     enableTable();
     if (game.countShips === 0)
@@ -223,10 +365,10 @@ function goBack() {
 function checkReady() {
     for (let i = 2; i <= 5; i++) {
         let num = document.getElementById("place".concat(i)).textContent;
-        if (num != 5-i+1)
+        if (parseInt(num) !== 5-i+1)
             return;
     }
-    disabledTable();
+    disabledTable("your");
     document.getElementById("ready").disabled = false;
 }
 
@@ -237,4 +379,30 @@ function cellParser(id) {
         row: parseInt(vect[1]),
         col: parseInt(vect[2])
     };
+}
+
+function updateStatus(status) {
+    game.gameStatus = status;
+    let label = document.getElementById("phase");
+    switch (game.gameStatus) {
+        case "loading":
+            label.textContent = "SET YOUR GRID";
+            enableTable();
+            disabledTable("enemy");
+            break;
+        case "play":
+            label.textContent = "YOUR TURN";
+            enableTable();
+            disabledTable("your");
+            break;
+        case "idle":
+            label.textContent = "ENEMY TURN";
+            disabledTable("your");
+            disabledTable("enemy");
+            break;
+    }
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max) + 1;
 }

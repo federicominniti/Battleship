@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="./../image/png" href="./../images/battleship_icon.png"/>
     <link href="./../css/game.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="../javascript/gameController.js"></script>
-    <script type="text/javascript" src="../javascript/game.js"></script>
-    <script type="text/javascript" src="../javascript/chat.js" defer></script>
+
     <title>Battleship - Game</title>
 </head>
 <body>
@@ -18,8 +16,7 @@
 %>
     <script>
         const loggedUser = '<%= loggedUsername %>';
-        const opponent = '<%=opponent%>';
-        const game = new Game(5000, 5000);
+        const opponent = '<%= opponent %>';
     </script>
 
     <div id="container">
@@ -45,7 +42,7 @@
         </div>
 
         <div id="status">
-            <button id="ready" disabled>READY</button>
+            <button id="ready" onclick="sendReady()" disabled>READY</button>
             <button>SURRENDER</button>
             <button id="back" onclick="goBack()" disabled>BACK</button>
             <cite>Your Navy</cite>
@@ -96,13 +93,18 @@
             </div>
         </div>
     </div>
+<script src="./../javascript/webSocket.js"></script>
+<script type="text/javascript" src="../javascript/gameController.js"></script>
+<script type="text/javascript" src="../javascript/game.js"></script>
+<script type="text/javascript" src="../javascript/chat.js"></script>
 
-    <script>
+<script>
+        const game = new Game(5000);
         window.onload = () => {
             createGrid('enemy', 'my-ground');
             createGrid('your', 'enemy-ground');
         }
-    </script>
-    <!--<script src="./../javascript/webSocket.js"></script>-->
+</script>
+
 </body>
 </html>

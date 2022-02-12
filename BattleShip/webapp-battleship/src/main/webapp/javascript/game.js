@@ -7,16 +7,14 @@ class Ship {
 
 // status -> loading, play, idle
 class Game {
-    constructor(loadTime, turnTime) {
+
+    constructor(turnTime) {
         this.ships = [];
         this.countShips = 0;
-        this.loadTime = loadTime;
         this.turnTime = turnTime;
-        this.gameStatus = "loading"
-    }
-
-    setGameStatus(status) {
-        this.gameStatus = status;
+        this.gameStatus = "loading";
+        this.myRandom = 0;
+        this.receivedRandom = 0;
     }
 
     addShip(ship) {
@@ -28,21 +26,32 @@ class Game {
         return this.ships.pop();
     }
 
-    removeShip(id) {
+    checkShoot(id) {
         for (let i = 0; i < this.ships.length; i++) {
-            if (this.ships[i].id == id){
-                this.ships.splice(i, 1);
+            // find the target ship
+            if (this.ships[i].id === id) {
+                let countHit = 1;
+                for (let j = 0; j < this.ships[i].coordinates.length; j++) {
+                    let cellStatus = checkHitCell("your", this.ships[i].coordinates[j].row,
+                        this.ships[i].coordinates[j].col);
+                    if (cellStatus)
+                        countHit++;
+                }
+                console.log("length: " + this.ships[i].coordinates.length);
+                console.log("id " + this.ships[i].id);
+                console.log("hit " + countHit);
+                // check if the ship is sunk
+                if (countHit === this.ships[i].coordinates.length){
+                    this.ships.splice(this.ships[i].id, 1);
+                    return countHit;
+                }
+                else
+                    return "hit";
             }
         }
-        this.checkLostGame()
     }
 
     getShipId() {
         return ++this.countShips;
     }
-
-    checkLostGame() {
-
-    }
-
 }

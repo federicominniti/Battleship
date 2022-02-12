@@ -9,13 +9,17 @@
     List<UserDTO> rank = (List<UserDTO>) session.getAttribute("ranking");
     UserDTO user = (UserDTO) session.getAttribute("loggedUser");
 %>
+<script>
+    let username = '<%= user.getUsername() %>';
+    let numReloads = '<%= session.getAttribute("numReloads") %>';
+</script>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="./../images/battleship_icon.png"/>
     <link href="./../css/homepage.css" rel="stylesheet" type="text/css">
     <title>BattleShip - HomePage</title>
 </head>
-<body>
+<body onload="refreshPage()" onbeforeunload="saveDataAndQuit()">
     <div id="container">
         <img id="logo" height="150" width="200" src="./../images/Battleship-logos_black.png" alt="logo">
         <header id="player-info">
@@ -65,10 +69,8 @@
         </div>
     </div>
 
+    <cite>NR <%= session.getAttribute("numReloads") %></cite>
 
-    <script>
-        var username = '<%= user.getUsername() %>';
-    </script>
     <script src="./../javascript/webSocket.js"></script>
     <script src="./../javascript/homepage.js"></script>
 </body>

@@ -69,8 +69,6 @@
         </div>
     </div>
 
-    <cite>NR <%= session.getAttribute("numReloads") %></cite>
-
     <script src="./../javascript/webSocket.js"></script>
     <script src="./../javascript/homepage.js"></script>
 </body>

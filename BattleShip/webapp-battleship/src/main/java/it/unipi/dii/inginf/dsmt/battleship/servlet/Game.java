@@ -36,7 +36,6 @@ public class Game extends HttpServlet {
             request.setAttribute("opponentUsername", opponent);
             dispatcher.include(request, response);
         }
-
-        response.sendRedirect(request.getContextPath() + "/pages/game.jsp");
+        // response.sendRedirect(request.getContextPath() + "/pages/game.jsp");
     }
 }

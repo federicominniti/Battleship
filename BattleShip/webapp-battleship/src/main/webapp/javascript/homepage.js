@@ -61,7 +61,8 @@ webSocket.onmessage = function (event){
             }
         }
     } else if(jsonString.type === 'logged_sender_error'){
-        alert("You are logged in from another device!")
+        alert("You are logged in from another device!");
+        closeWebSocket();
         document.location.href = './../logout';
     }
 };
@@ -86,6 +87,7 @@ function removeOnClick(element){
 }
 
 function startBattleship(opponent){
+    closeWebSocket();
     let hiddenForm = document.createElement("form");
     hiddenForm.setAttribute('method',"post");
     hiddenForm.setAttribute('action',"game");

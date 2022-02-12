@@ -40,6 +40,7 @@ function sendWebSocket(message) {
 
 function closeWebSocket() {
     webSocket.close();
+    delete webSocket;
 }
 
 function waitForSocketConnection(socket, callback) {

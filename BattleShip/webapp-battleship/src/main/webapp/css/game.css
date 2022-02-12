@@ -266,12 +266,20 @@ body{
     opacity: 1;
 }
 
+.miss {
+    background-color: #00fff4;
+    animation-name: missed;
+    animation-duration: 3s;
+}
+
 .green {
     background-color: #4dff4d;
 }
 
 .hit {
     background-color: #ff4d4d;
+    animation-name: hitted;
+    animation-duration: 3s;
 }
 
 .navy {
@@ -280,6 +288,24 @@ body{
 
 .orange {
     background-color: darkorange;
+}
+
+@keyframes missed {
+    0%   {background-color: #0406D3;}
+    20%  {background-color: #00fff4;}
+    40%  {background-color: #0406D3;}
+    60%  {background-color: #00fff4;}
+    80%  {background-color: #0406D3;}
+    100% {background-color: #00fff4;}
+}
+
+@keyframes hitted {
+    0%   {background-color: #0406D3;}
+    20%  {background-color: #ff4d4d;}
+    40%  {background-color: #0406D3;}
+    60%  {background-color: #ff4d4d;}
+    80%  {background-color: #0406D3;}
+    100% {background-color: #ff4d4d;}
 }
 
 
