@@ -15,37 +15,67 @@
 % function to start the server
 init_server() ->
   Server = self(),
-  BattleShipPid = spawn( fun() -> battleship_daemon(Server, []) end ),
-  server_loop(BattleShipPid).
+  BattleShipPid = spawn( fun() -> battleship_daemon(Server, #{}) end ),
+  RandomOpponentPid = spawn( fun() -> random_opponent_daemon(null) end ),
+  server_loop(BattleShipPid, RandomOpponentPid).
 
 % server node loop
-server_loop(BattleShipPid) ->
-  receive
-    {From, {update_online_user, Operation} } ->
-      BattleShipPid ! {From, Operation},
-      server_loop(BattleShipPid);
-    {From, {stop} } ->
-      BattleShipPid ! {self(), stop},
-      From ! {ok};
-    _ ->  %any out-of-domain [interaction, stop] message is skipped
-      server_loop(BattleShipPid)
-  end.
-
+server_loop(BattleShipPid, RandomOpponentPid) ->
+  	receive
+		{From, {update_online_user, Operation} } ->
+			BattleShipPid ! {From, Operation},
+			server_loop(BattleShipPid, RandomOpponentPid);
+	  
+		{From, search_random_opponent} ->
+			RandomOpponentPid ! {From, search_random_opponent},
+			server_loop(BattleShipPid, RandomOpponentPid);
+		
+    	{From, {stop} } ->
+      		BattleShipPid ! {self(), stop},
+      		From ! {ok};
+    	_ ->  %any out-of-domain [interaction, stop] message is skipped
+      		server_loop(BattleShipPid, RandomOpponentPid)
+  	end.
+  
+random_opponent_daemon(User) -> %%MANDARE MESS A CLIENT SINGOLI ANCHE
+	receive
+		{From, search_random_opponent} ->
+			if
+				(User == null) -> 
+					NewUser = From,
+					random_opponent_daemon(NewUser);
+				true -> 
+					%<<"sender">> => erlang:atom_to_binary(From)
+					MessageUser = jsx:encode(#{<<"type">> => <<"battleship_accepted">>, <<"sender">> => From}),
+					User ! MessageUser,
+					MessageFrom = jsx:encode(#{<<"type">> => <<"battleship_accepted">>, <<"sender">> => User}),
+					From ! MessageFrom,
+					NewUser = null,
+					random_opponent_daemon(NewUser)
+			end
+	end.
 
 %battleship daemon waits connection from
 battleship_daemon(Server, OnlineUsers) ->
   receive
     {From, add} ->
-      UpdatedOnlineUsers = OnlineUsers ++ [From],
+      UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
       send_all(UpdatedOnlineUsers),  %% publish the updated version of the available users where 'From' has been added
       io:format("New user available: ~s ", [From]),
       io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
       battleship_daemon(Server, UpdatedOnlineUsers);
+	  
+	{From, user_in_game} ->
+		UpdatedOnlineUsers = maps:put(From, in_game, OnlineUsers),
+		send_all(UpdatedOnlineUsers),
+		io:format("~s starts a game", [From]),
+		battleship_daemon(Server, UpdatedOnlineUsers);
+		
     {From, remove} ->
-      UpdatedOnlineUsers = lists:delete(From, OnlineUsers),
+      UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
       send_all(UpdatedOnlineUsers),  %% publish the updated version of the available users where 'From' has been removed
-      send_all(UpdatedOnlineUsers, From),  %% all game requests coming from this user are deleted
-      io:format("~s is now offline", [From]),
+      update_all(UpdatedOnlineUsers, From),  %% all game requests coming from this user are deleted
+      io:format("~s is now offline\n", [From]),
       io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
       battleship_daemon(Server, UpdatedOnlineUsers);
     {Server, stop} ->
@@ -55,8 +85,11 @@ battleship_daemon(Server, OnlineUsers) ->
 
 
 % It sends a message to all clients ready to start a new match
-send_all(List) ->
-  send_all(List, List).
+send_all(Map) ->
+	Pred = fun(K,V) -> (V =:= in_lobby) end,
+	Filtered = maps:filter(Pred, Map),
+	List = maps:keys(Filtered),
+  	send_all(List, List).
 
 send_all([], _) -> ok;
 
@@ -68,3 +101,9 @@ send_all([First|Others], Data) ->
       First ! jsx:encode(#{<<"type">> => <<"remove_user_requests">>, <<"data">> => Data})
   end,
   send_all(Others, Data).
+  
+update_all(Map, From) ->
+	Pred = fun(K,V) -> (V =:= in_lobby) end,
+	Filtered = maps:filter(Pred, Map),
+	List = maps:keys(Filtered),
+  	send_all(List, From).
