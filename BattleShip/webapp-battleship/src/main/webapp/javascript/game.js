@@ -1,12 +1,19 @@
 class Ship {
-    constructor(id, coordinates) {
+    constructor(id, length) {
         this.id = id;
-        this.coordinates = coordinates;
+        this.type = length;
+        this.life = length;
+    }
+
+    checkSunk() {
+        this.life--;
+        return this.life === 0;
     }
 }
 
 // status -> loading, play, idle
 class Game {
+
 
     constructor(turnTime) {
         this.ships = [];
@@ -15,6 +22,7 @@ class Game {
         this.gameStatus = "loading";
         this.myRandom = 0;
         this.receivedRandom = 0;
+        this.timeOut = null;
     }
 
     addShip(ship) {
@@ -29,21 +37,14 @@ class Game {
     checkShoot(id) {
         for (let i = 0; i < this.ships.length; i++) {
             // find the target ship
-            if (this.ships[i].id === id) {
-                let countHit = 1;
-                for (let j = 0; j < this.ships[i].coordinates.length; j++) {
-                    let cellStatus = checkHitCell("your", this.ships[i].coordinates[j].row,
-                        this.ships[i].coordinates[j].col);
-                    if (cellStatus)
-                        countHit++;
-                }
-                console.log("length: " + this.ships[i].coordinates.length);
-                console.log("id " + this.ships[i].id);
-                console.log("hit " + countHit);
+            // console.log(typeof  id, typeof this.ships[i].id)
+            if (this.ships[i].id === parseInt(id)) {
+                let shipSunk = this.ships[i].checkSunk();
                 // check if the ship is sunk
-                if (countHit === this.ships[i].coordinates.length){
+                if (shipSunk){
+                    let len = this.ships[i].type;
                     this.ships.splice(this.ships[i].id, 1);
-                    return countHit;
+                    return len;
                 }
                 else
                     return "hit";
