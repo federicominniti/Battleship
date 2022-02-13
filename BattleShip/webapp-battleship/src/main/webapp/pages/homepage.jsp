@@ -66,6 +66,8 @@
             <cite>Online Player</cite>
         </div>
         <div id="received-request">
+            <cite>Game Request</cite>
+
         </div>
     </div>
 

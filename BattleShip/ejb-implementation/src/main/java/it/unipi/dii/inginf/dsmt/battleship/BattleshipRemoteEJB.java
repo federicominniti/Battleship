@@ -122,16 +122,15 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         Query query;
         if (winOrLoss) {
             query = entityManager.createQuery(
-                    "UPDATE User u SET u.gameWins = u.gameWins + 1 WHERE u.username = '" + dto.getUsername() + "'"
+                    "UPDATE User u SET u.gameWins = u.gameWins + 1 WHERE u.username = :username"
             );
 
         } else {
             query = entityManager.createQuery(
-                    "UPDATE User u SET u.gameLose = u.gameLose + 1 WHERE u.username = '" + dto.getUsername() + "'"
+                    "UPDATE User u SET u.gameLose = u.gameLose + 1 WHERE u.username = :username"
             );
-
         }
-
+        query.setParameter("username", dto.getUsername());
         query.executeUpdate();
     }
 }

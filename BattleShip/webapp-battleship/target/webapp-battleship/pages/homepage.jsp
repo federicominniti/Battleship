@@ -47,7 +47,7 @@
             </p>
             <a onclick="window.location.href='../logout'">Logout</a>
         </header>
-        <button id="play" class="button">SEARCH BATTLE</button>
+        <button id="play" class="button" onclick="searchRandomOpponent()">SEARCH BATTLE</button>
         <div id="ranking">
             <cite>Best Player</cite>
             <% if (rank != null) {
@@ -66,6 +66,8 @@
             <cite>Online Player</cite>
         </div>
         <div id="received-request">
+            <cite>Game Request</cite>
+
         </div>
     </div>
 

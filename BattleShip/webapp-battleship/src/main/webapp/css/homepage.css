@@ -64,28 +64,99 @@ p {
 }
 
 #online-users {
-    grid-column: 7/11;
+    grid-column: 6/8;
     grid-row: 4/5;
     background-color: #0406D3;
     border-radius: 15px;
     padding: 10px;
-    display: grid;
-    grid-template-columns: 1fr;
+    text-align: -webkit-center;
+    position: relative;
     align-items: center;
     justify-items: center;
     row-gap: 10px;
     color: white;
 }
 
+
+#received-request {
+    grid-column: 8/11;
+    grid-row: 4/5;
+    background-color: #0406D3;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: -webkit-center;
+    position: relative;
+    align-items: center;
+    justify-items: center;
+    row-gap: 10px;
+    color: white;
+}
+
+#received-request *, #online-users * {
+    margin-bottom: 5px;
+}
+
+.game-request, .player{
+    width: 80%;
+    background-color: darkorange;
+    border-radius: 5px;
+    display: grid;
+    clear: both;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    padding: 5px;
+    gap: 5px;
+}
+
+.accept {
+    background-color: #4dff4d;
+    color: white;
+    border: 2px solid #4dff4d;
+    border-radius: 5px;
+}
+
+.accept:hover, .decline:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.decline {
+    background-color: #ff4d4d;
+    color: white;
+    border: 2px solid #ff4d4d;
+    border-radius: 5px;
+}
+
+.player button{
+    background-color: #4dff4d;
+    color: white;
+    border: 2px solid #4dff4d;
+    border-radius: 5px;
+}
+
+.player button:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.player button:disabled{
+    opacity: 0;
+}
+
+.game-request label {
+    grid-column: 1/3;
+}
+
 #ranking {
-    grid-column: 3/7;
+    grid-column: 3/6;
     grid-row: 4/5;
     background-color: #0406D3;
     border-radius: 15px;
     padding: 10px;
     display: grid;
     grid-template-columns: 1fr;
-    align-items: center;
+    align-items: start;
     justify-items: center;
     row-gap: 10px;
     color: white;
