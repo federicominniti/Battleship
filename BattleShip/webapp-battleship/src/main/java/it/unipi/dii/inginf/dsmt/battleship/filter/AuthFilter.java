@@ -15,6 +15,10 @@ public class AuthFilter implements Filter {
 
     }
 
+    /**
+     * When navigating in pages that are not the "index.jsp", checks if the user is logged in.
+     * In case the user is not logged in, redirects them to the login page.
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;

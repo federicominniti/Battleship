@@ -15,6 +15,10 @@ public class ReloadFilter implements Filter {
 
     }
 
+    /**
+     * Checks if the user has already visited the homepage, useful to know if they have to be inserted in the
+     * online users list or not.
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;

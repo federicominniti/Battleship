@@ -15,6 +15,9 @@ public class IndexServletFilter implements Filter {
 
     }
 
+    /**
+     * Prevents logged users from visiting the login/register page.
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         System.out.println("index filter");

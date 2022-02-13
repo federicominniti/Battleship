@@ -13,6 +13,10 @@ public class EndGameFilter implements Filter {
 
     }
 
+    /**
+     * Checks that the user visiting the game result page has really just ended a game. If not, redirects them
+     * to the homepage
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;

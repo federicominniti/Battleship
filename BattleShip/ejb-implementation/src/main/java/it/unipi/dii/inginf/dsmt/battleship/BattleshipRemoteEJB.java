@@ -35,6 +35,11 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         return dto;
     }
 
+    /**
+     * Ranks registered users in descending order of victories/defeats ratio.
+     * @param limit the limit of users to return
+     * @return a list of users
+     */
     @Override
     public List<UserDTO> rankingUsersJPA(int limit) {
         Query query = entityManager.createQuery(
@@ -56,6 +61,11 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         return results;
     }
 
+    /**
+     * Retrieves a user
+     * @param username the username of the user to retrieve
+     * @return null if the there isn't a user associated with the username, a User otherwise
+     */
     @Override
     public UserDTO findByUsernameJPA(String username) {
         User user = entityManager.find(User.class, username);
@@ -65,6 +75,10 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         return dto;
     }
 
+    /**
+     * Registers a user
+     * @param dto the user to be saved
+     */
     @Override
     public void saveUserJPA(UserDTO dto) {
         User user = new User();
@@ -74,6 +88,10 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         entityManager.persist(user);
     }
 
+    /**
+     * Performs the login operation via username and password
+     * @return null if the login has gone wrong, a UserDTO otherwise
+     */
     @Override
     public UserDTO login(String username, String password) {
         User user;
@@ -94,6 +112,11 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
         return dto;
     }
 
+    /**
+     * Registers the result of a game for a user. Can be either a win or a loss
+     * @param dto the user involved in the operation
+     * @param winOrLoss true if it's a win, false otherwise
+     */
     @Override
     public void saveGame(UserDTO dto, boolean winOrLoss) {
         Query query;

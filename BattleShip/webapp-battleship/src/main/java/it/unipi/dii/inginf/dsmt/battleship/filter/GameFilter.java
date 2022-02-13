@@ -15,6 +15,10 @@ public class GameFilter implements Filter {
 
     }
 
+    /**
+     * Checks that the user entering the game page has really just started a match. If not, redirects
+     * them to the homepage.
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
