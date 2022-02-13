@@ -62,14 +62,21 @@ websocket_handle ({text, Text}, State) ->
 		  %NameProcess = element(2, ProcessInfo),
 		  NameProcess = erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap)),
 		  online_users ! {NameProcess, {update_online_user, add}},
-		  %io:format("Mandato: ~s ", [pippo]),
 		  NewState = {waiting_opponent, State}
       end;
     opponent_registration ->
-      NewState = {opponent_user, erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap))}; %% register the opponent in the state
-    _ -> %% all the other types of message [battleship_request, battleship_accepted, list_update]
+		online_users ! {SenderName, {update_online_user, user_in_game}},
+      	NewState = {opponent_user, erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap))}; %% register the opponent in the state
+	  
+    
+	random_opponent ->
+		online_users ! {SenderName, search_random_opponent},
+		NewState = {search_random_opponent, SenderName};
+	
+	_ -> %% all the other types of message [battleship_request, battleship_accepted, list_update, chat_message, ready, shoot, miss, hit, sunk]
       NewState = State,
       Receiver = erlang:binary_to_atom(maps:get(<<"receiver">>, TextAsMap)),
+	  %io:fwrite("~w~n", [NewState]),
       ReceiverPID = whereis(Receiver),
       if
         ReceiverPID == undefined -> %% The receiver is disconnected
@@ -90,7 +97,7 @@ websocket_handle (_, State) -> {ok, State}.
 %% remote -> The client close the connection
 
 %% In case of termination in a game page
-terminate (TerminateReason, _Req, {opponent_username, OpponentUsername}) ->
+terminate (TerminateReason, _Req, {opponent_user, OpponentUsername}) ->
   io:format("Terminate reason: ~p\n", [TerminateReason]),
   OpponentPID = whereis(OpponentUsername),
   if
@@ -99,18 +106,21 @@ terminate (TerminateReason, _Req, {opponent_username, OpponentUsername}) ->
     true ->
       ok
   end;
+  
+terminate (TerminateReason, _Req, {search_random_opponent, User}) ->
+	online_users ! {User, {update_online_user, remove}},
+  	io:format("~s found an opponent\n", [User]),
+  	io:format("Terminate reason: ~p\n", [TerminateReason]);
+  
 
 %% In case of termination in a waiting room
 terminate (TerminateReason, _Req, {waiting_opponent, State}) ->
   % Name = element(2, erlang:process_info(self(), registered_name)),
   ProcessInfo = process_info(self(), registered_name),
   NameProcess = element(2, ProcessInfo),
-  io:format("I AM: ~s ", [NameProcess]),
   online_users ! {NameProcess, {update_online_user, remove}},
   io:format("Terminate reason: ~p\n", [TerminateReason]);
 
 terminate (TerminateReason, _Req, {}) ->
   io:format("Terminate reason: ~p\n", [TerminateReason]),
   io:format("Terminate with empty state ~n").
-
-%% TODO -> remove player that are playing from online users
