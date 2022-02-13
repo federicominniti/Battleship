@@ -25,7 +25,6 @@ webSocket.onmessage = function (event) {
                 }
                 break;
             case "shoot":
-                // take the cell id
                 coordinate = jsonString.data.split("-");
                 let targetCellId = createId("your", coordinate[0], coordinate[1]);
                 let shipId = document.getElementById(targetCellId).textContent;
@@ -35,18 +34,18 @@ webSocket.onmessage = function (event) {
                     missCell("your", coordinate[0], coordinate[1]);
                     sendWebSocket(message);
                 } else {    // hit or sunk
+                    hitCell("your", coordinate[0], coordinate[1]);
                     let result = game.checkShoot(shipId);
-                    if (result === "hit") {
-                        hitCell("your", coordinate[0], coordinate[1]);
+                    console.log("game result: " + result);
+                    if (typeof result === "string") {
                         message = new Message("hit", jsonString.data, loggedUser, opponent);
-                        sendWebSocket(message);
-                    } else {
+                    } else if (typeof result === "number") {
                         let info = jsonString.data.concat("_", result);
                         document.getElementById("place".concat(result)).textContent--;
                         message = new Message("sunk", info, loggedUser, opponent);
-                        sendWebSocket(message);
-                        checkEndGame("lose");
                     }
+                    sendWebSocket(message);
+                    checkEndGame("lose");
                 }
                 updateStatus("play");
                 break;
@@ -67,6 +66,12 @@ webSocket.onmessage = function (event) {
                 hitCell("enemy", coordinate[0], coordinate[1]);
                 updateStatus("idle");
                 checkEndGame("win");
+                break;
+            case "timeout":
+                updateStatus("play");
+                break;
+            case "surrend":
+                enemySurrender();
                 break;
         }
     }
@@ -254,14 +259,14 @@ function chooseShip(id, direction, len) {
         });
         cell.setAttribute("class", "cell navy");
         cell.setAttribute("onclick", null);
-        cell.textContent = game.countShips;
+        cell.textContent = game.countShips + 1;
         if (cellClass === "cell green")
             break
         counter++;
     }
     let shipLen = parseInt(len) + 1;
     document.getElementById("place".concat(shipLen)).textContent++;
-    let ship = new Ship(game.getShipId(), coordinatesArray)
+    let ship = new Ship(game.getShipId(), shipLen)
     game.addShip(ship);
     document.getElementById("back").disabled = false
     // clean orange (undo select with the green)
@@ -271,6 +276,22 @@ function chooseShip(id, direction, len) {
     checkReady()
 }
 
+function enemySurrender() {
+    for (let i = 2; i <= 5; i++) {
+        document.getElementById("enemy".concat(i)).textContent = 0;
+    }
+    checkEndGame("win");
+}
+
+function surrender() {
+    for (let i = 2; i <= 5; i++) {
+        document.getElementById("place".concat(i)).textContent = 0;
+    }
+    let message = new Message("surrend", null, loggedUser, opponent);
+    sendWebSocket(message);
+    checkEndGame("lose");
+}
+
 function checkEndGame(status) {
     let counter;
     for (let i = 2; i <= 5; i++) {
@@ -278,9 +299,10 @@ function checkEndGame(status) {
             counter = document.getElementById("place".concat(i)).textContent;
         else
             counter = document.getElementById("enemy".concat(i)).textContent;
-        if (counter !== 0)
+        if (parseInt(counter) !== 0)
             return;
     }
+    console.log("END GAME");
     closeWebSocket();
     let hiddenForm = document.createElement("form");
     hiddenForm.setAttribute('method',"post");
@@ -297,7 +319,25 @@ function checkEndGame(status) {
     hiddenForm.submit();
 }
 
+function startTimer () {
+    let time = document.getElementById("timer");
+    time.textContent = game.turnTime;
+    game.timeOut = setInterval(handleTimer, 1000, time);
+}
 
+function handleTimer(time) {
+    time.textContent--;
+    if (parseInt(time.textContent) <= 0) {
+        updateStatus("idle");
+        let message = new Message("timeout", null, loggedUser, opponent);
+        sendWebSocket(message);
+    }
+}
+
+function stopTimer(time) {
+    time.textContent = "";
+    clearInterval(game.timeOut);
+}
 // -------------------------UTILITY------------------------
 // change the status of a cell
 function hitCell(grid, row, col) {
@@ -312,12 +352,6 @@ function missCell(grid, row, col) {
     let cell = document.getElementById(cellId);
     cell.setAttribute("class", "cell miss");
     cell.setAttribute("onclick", "null");
-}
-
-function checkHitCell(grid, row, col) {
-    let cellId = createId(grid, row, col);
-    let cell = document.getElementById(cellId);
-    return cell.className === "cell hit";
 }
 
 // convert coordinates to id
@@ -347,13 +381,15 @@ function enableTable() {
 // remove the last ship insert
 function goBack() {
     let ship = game.deleteShip();
-    document.getElementById("place".concat(ship.coordinates.length)).textContent--;
-    for(let i = 0; i < ship.coordinates.length; i++){
-        let idCell = createId("your", ship.coordinates[i].row, ship.coordinates[i].col)
-        let cell = document.getElementById(idCell);
-        cell.setAttribute("onclick", "cellInteraction('" + idCell + "')")
-        cell.setAttribute("class", "cell std");
-        cell.textContent = "";
+    document.getElementById("place".concat(ship.type)).textContent--;
+    let cells = document.getElementsByClassName("cell");
+    console.log(cells);
+    for(let i = 0; i < cells.length; i++){
+        if (cells[i].textContent == ship.id && cells[i].className !== "cell white"){
+            cells[i].textContent = "";
+            cells[i].setAttribute("class", "cell std");
+            cells[i].setAttribute("onclick", "cellInteraction('" + cells[i].id + "')");
+        }
     }
     document.getElementById("ready").disabled = true;
     enableTable();
@@ -394,9 +430,11 @@ function updateStatus(status) {
             label.textContent = "YOUR TURN";
             enableTable();
             disabledTable("your");
+            startTimer();
             break;
         case "idle":
             label.textContent = "ENEMY TURN";
+            stopTimer(document.getElementById("timer"));
             disabledTable("your");
             disabledTable("enemy");
             break;

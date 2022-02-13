@@ -43,7 +43,7 @@
 
         <div id="status">
             <button id="ready" onclick="sendReady()" disabled>READY</button>
-            <button>SURRENDER</button>
+            <button onclick="surrender()">SURRENDER</button>
             <button id="back" onclick="goBack()" disabled>BACK</button>
             <cite>Your Navy</cite>
             <div class="border">
@@ -99,7 +99,7 @@
 <script type="text/javascript" src="../javascript/chat.js"></script>
 
 <script>
-        const game = new Game(5000);
+        const game = new Game(60);
         window.onload = () => {
             createGrid('enemy', 'my-ground');
             createGrid('your', 'enemy-ground');
