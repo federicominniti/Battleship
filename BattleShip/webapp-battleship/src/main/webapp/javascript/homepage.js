@@ -169,6 +169,10 @@ function addPossibleOpponent(sender){
     table.appendChild(tr);
 }
 
+function searchRandomOpponent(){
+    sendWebSocket(new Message('random_opponent', null, username, null));
+}
+
 /*function confirmLeave() {
     if(numReloads != 0)
         if (confirm('Are you sure you want to leave the page? If you leave the page your session will terminate and you will have to log in again') == true) {
