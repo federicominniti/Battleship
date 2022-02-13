@@ -46,7 +46,7 @@ public class Endgame extends HttpServlet {
         List<UserDTO> ranking = battleshipRemote.rankingUsersJPA(10);
         session.setAttribute("ranking", ranking);
         session.setAttribute("loggedUser", user);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("./pages/result.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/result.jsp");
         dispatcher.include(request, response);
     }
 
