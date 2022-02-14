@@ -144,18 +144,16 @@ function refreshPage(){
 
 function saveDataAndQuit() {
     if (numReloads != 0){
-        let container = document.getElementById("received-request");
-        let table;
-        if (container.getElementsByTagName("table")[0] != null) {
-            table = container.getElementsByTagName("table")[0];
-            let users = null;
-            for (let i = 0; i < table.childNodes.length; i++) {
-                users.push(table.childNodes.item(i).textContent);
+        let users = [];
+        let divUsers = document.getElementsByClassName("game-request");
+        if (divUsers != null) {
+            for (let i = 0; i < divUsers.length; i++) {
+                console.log(divUsers);
+                users.push(divUsers[i].id);
             }
             window.sessionStorage.setItem("opponentRequests", users);
         }
         closeWebSocket();
-        document.location.href = './../paginaDiCaricamentoDaFare';      // TODO
     }
 }
 
