@@ -161,6 +161,8 @@ function saveDataAndQuit() {
 
 function searchRandomOpponent(){
     sendWebSocket(new Message('random_opponent', null, username, null));
+    let overlay = document.getElementById("overlay");
+    overlay.style.display = "block";
 }
 
 /*function confirmLeave() {

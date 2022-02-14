@@ -20,6 +20,7 @@
     <title>BattleShip - HomePage</title>
 </head>
 <body onload="refreshPage()" onbeforeunload="saveDataAndQuit()">
+    <div id ="overlay"><div class = "dot-flashing"></div></div>
     <div id="container">
         <img id="logo" height="150" width="200" src="./../images/Battleship-logos_black.png" alt="logo">
         <header id="player-info">
