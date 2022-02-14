@@ -132,8 +132,9 @@ function startBattleship(opponent){
 
 function refreshPage(){
     if(numReloads != 0) {
-        let users = window.sessionStorage.getItem("opponentRequests");
-        if (users != null) {
+        let opponentRequests = window.sessionStorage.getItem("opponentRequests");
+        let users = opponentRequests.split('-');
+        if (users.length !== 0) {
             let container = document.getElementById("received-request");
             for (let i = 0; i < users.length; i++) {
                 container.appendChild(battleRequestCard(users[i]));
@@ -144,12 +145,14 @@ function refreshPage(){
 
 function saveDataAndQuit() {
     if (numReloads != 0){
-        let users = [];
+        let users = "";
         let divUsers = document.getElementsByClassName("game-request");
         if (divUsers != null) {
             for (let i = 0; i < divUsers.length; i++) {
-                console.log(divUsers);
-                users.push(divUsers[i].id);
+                if(i === 0)
+                    users = divUsers[i].id;
+                else
+                    users = users + "-" + divUsers[i].id;
             }
             window.sessionStorage.setItem("opponentRequests", users);
         }
