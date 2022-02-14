@@ -147,6 +147,7 @@ p {
 
 .game-request label {
     grid-column: 1/3;
+    word-break: break-all;
 }
 .player label {
     word-break: break-all;

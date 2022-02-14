@@ -1,7 +1,6 @@
 it/unipi/dii/inginf/dsmt/battleship/servlet/Endgame.class
 it/unipi/dii/inginf/dsmt/battleship/filter/EndGameFilter.class
 it/unipi/dii/inginf/dsmt/battleship/filter/AuthFilter.class
-it/unipi/dii/inginf/dsmt/battleship/filter/ReloadFilter.class
 it/unipi/dii/inginf/dsmt/battleship/servlet/LogoutServlet.class
 it/unipi/dii/inginf/dsmt/battleship/servlet/IndexServlet.class
 it/unipi/dii/inginf/dsmt/battleship/config/Config.class

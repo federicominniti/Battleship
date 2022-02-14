@@ -11,7 +11,6 @@
 %>
 <script>
     let username = '<%= user.getUsername() %>';
-    let numReloads = '<%= session.getAttribute("numReloads") %>';
 </script>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">

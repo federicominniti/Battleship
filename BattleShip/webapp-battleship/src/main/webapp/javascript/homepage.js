@@ -131,10 +131,10 @@ function startBattleship(opponent){
 }
 
 function refreshPage(){
-    if(numReloads != 0) {
-        let opponentRequests = window.sessionStorage.getItem("opponentRequests");
+    let opponentRequests = window.sessionStorage.getItem("opponentRequests");
+    if (opponentRequests !== null && opponentRequests !== "") {
         let users = opponentRequests.split('-');
-        if (users.length !== 0) {
+        if (users[0] !== "") {
             let container = document.getElementById("received-request");
             for (let i = 0; i < users.length; i++) {
                 container.appendChild(battleRequestCard(users[i]));
@@ -144,20 +144,18 @@ function refreshPage(){
 }
 
 function saveDataAndQuit() {
-    if (numReloads != 0){
-        let users = "";
-        let divUsers = document.getElementsByClassName("game-request");
-        if (divUsers != null) {
-            for (let i = 0; i < divUsers.length; i++) {
-                if(i === 0)
-                    users = divUsers[i].id;
-                else
-                    users = users + "-" + divUsers[i].id;
-            }
+    let users = "";
+    let divUsers = document.getElementsByClassName("game-request");
+    if (divUsers != null) {
+        for (let i = 0; i < divUsers.length; i++) {
+            if (i === 0)
+                users = divUsers[i].id;
+            else
+                users = users + "-" + divUsers[i].id;
             window.sessionStorage.setItem("opponentRequests", users);
         }
-        closeWebSocket();
     }
+    closeWebSocket();
 }
 
 function searchRandomOpponent(){
@@ -166,10 +164,3 @@ function searchRandomOpponent(){
     overlay.style.display = "block";
 }
 
-/*function confirmLeave() {
-    if(numReloads != 0)
-        if (confirm('Are you sure you want to leave the page? If you leave the page your session will terminate and you will have to log in again') == true) {
-            closeWebSocket();
-            document.location.href = './../logout';
-        }
-}*/
