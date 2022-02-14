@@ -30,16 +30,12 @@ public class Endgame extends HttpServlet {
         if (request.getParameter("result") != null) {
             System.out.println("qui");
             if (request.getParameter("result").equals("win")) {
-                battleshipRemote.saveGame(user, true);
                 user.setGameWins(user.getGameWins() + 1);
+                user.setGameLose(user.getGameLose() - 1);
+                battleshipRemote.saveGame(user);
                 request.setAttribute("result", "win");
             } else if (request.getParameter("result").equals("lose")) {
-                user.setGameLose(user.getGameLose() + 1);
-                battleshipRemote.saveGame(user, false);
                 request.setAttribute("result", "lose");
-            }
-            else {
-                //mandare messaggio riguardo al fatto che la partita è stata interrota e quindi non salvata?
             }
         }
         List<UserDTO> ranking = battleshipRemote.rankingUsersJPA(10);

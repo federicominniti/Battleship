@@ -115,22 +115,12 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     /**
      * Registers the result of a game for a user. Can be either a win or a loss
      * @param dto the user involved in the operation
-     * @param winOrLoss true if it's a win, false otherwise
      */
     @Override
-    public void saveGame(UserDTO dto, boolean winOrLoss) {
-        Query query;
-        if (winOrLoss) {
-            query = entityManager.createQuery(
-                    "UPDATE User u SET u.gameWins = u.gameWins + 1 WHERE u.username = :username"
-            );
-
-        } else {
-            query = entityManager.createQuery(
-                    "UPDATE User u SET u.gameLose = u.gameLose + 1 WHERE u.username = :username"
-            );
-        }
-        query.setParameter("username", dto.getUsername());
-        query.executeUpdate();
+    public void saveGame(UserDTO dto) {
+        User user = entityManager.find(User.class, dto.getUsername());
+        user.setGameWins(dto.getGameWins());
+        user.setGameLose(dto.getGameLose());
+        entityManager.merge(user);
     }
 }

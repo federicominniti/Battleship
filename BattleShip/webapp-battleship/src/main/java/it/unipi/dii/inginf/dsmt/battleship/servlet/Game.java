@@ -1,5 +1,9 @@
 package it.unipi.dii.inginf.dsmt.battleship.servlet;
 
+import it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO;
+import it.unipi.dii.inginf.dsmt.battleship.intefaces.BattleshipRemote;
+
+import javax.ejb.EJB;
 import javax.servlet.DispatcherType;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +17,9 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "Game", value = "/pages/game")
 public class Game extends HttpServlet {
+    @EJB
+    private BattleshipRemote battleshipRemote;
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -25,14 +32,14 @@ public class Game extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
         String opponent = request.getParameter("opponentUsername");
-
+        HttpSession session = request.getSession();
+        UserDTO user = (UserDTO) session.getAttribute("loggedUser");
         if (opponent == null) {
             response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
         } else {
+            user.setGameLose(user.getGameLose() + 1);
+            battleshipRemote.saveGame(user);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/game.jsp");
-            response.setHeader("Pragma", "No-cache");
-            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-            response.setDateHeader("Expires", -1);
             request.setAttribute("opponentUsername", opponent);
             dispatcher.include(request, response);
         }
