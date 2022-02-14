@@ -5,6 +5,9 @@ waitForSocketConnection(webSocket,function() {
     sendWebSocket(new Message("opponent_registration", opponent, loggedUser, null));
 });
 
+window.onunload = function () {
+    surrender();
+}
 // RECEIVE
 webSocket.onmessage = function (event) {
     let jsonString = JSON.parse(event.data);
