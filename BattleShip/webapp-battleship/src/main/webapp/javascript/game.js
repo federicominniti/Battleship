@@ -11,9 +11,7 @@ class Ship {
     }
 }
 
-// status -> loading, play, idle
 class Game {
-
 
     constructor(turnTime) {
         this.ships = [];
@@ -36,11 +34,8 @@ class Game {
 
     checkShoot(id) {
         for (let i = 0; i < this.ships.length; i++) {
-            // find the target ship
-            // console.log(typeof  id, typeof this.ships[i].id)
             if (this.ships[i].id === parseInt(id)) {
                 let shipSunk = this.ships[i].checkSunk();
-                // check if the ship is sunk
                 if (shipSunk){
                     let len = this.ships[i].type;
                     this.ships.splice(this.ships[i].id, 1);
