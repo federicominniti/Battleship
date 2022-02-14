@@ -27,17 +27,16 @@ public class Endgame extends HttpServlet {
 
         HttpSession session = request.getSession();
         UserDTO user = (UserDTO) session.getAttribute("loggedUser");
-        System.err.println(user.getUsername());
         if (request.getParameter("result") != null) {
             System.out.println("qui");
             if (request.getParameter("result").equals("win")) {
                 battleshipRemote.saveGame(user, true);
                 user.setGameWins(user.getGameWins() + 1);
                 request.setAttribute("result", "win");
-            } else if (request.getParameter("result").equals("loss")) {
+            } else if (request.getParameter("result").equals("lose")) {
                 user.setGameLose(user.getGameLose() + 1);
                 battleshipRemote.saveGame(user, false);
-                request.setAttribute("result", "loss");
+                request.setAttribute("result", "lose");
             }
             else {
                 //mandare messaggio riguardo al fatto che la partita è stata interrota e quindi non salvata?
