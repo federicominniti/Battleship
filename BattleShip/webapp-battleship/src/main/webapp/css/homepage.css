@@ -69,7 +69,7 @@ p {
     background-color: #0406D3;
     border-radius: 15px;
     padding: 10px;
-    text-align: -webkit-center;
+    text-align: center;
     position: relative;
     align-items: center;
     justify-items: center;
@@ -84,7 +84,7 @@ p {
     background-color: #0406D3;
     border-radius: 15px;
     padding: 10px;
-    text-align: -webkit-center;
+    text-align: center;
     position: relative;
     align-items: center;
     justify-items: center;
@@ -98,6 +98,7 @@ p {
 
 .game-request, .player{
     width: 80%;
+    max-width: fit-content;
     background-color: darkorange;
     border-radius: 5px;
     display: grid;
