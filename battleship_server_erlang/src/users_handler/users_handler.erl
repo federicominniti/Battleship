@@ -68,6 +68,7 @@ battleship_daemon(Server, OnlineUsers) ->
 	{From, user_in_game} ->
 		UpdatedOnlineUsers = maps:put(From, in_game, OnlineUsers),
 		send_all(UpdatedOnlineUsers),
+		update_all(UpdatedOnlineUsers, From),
 		io:format("~s starts a game", [From]),
 		battleship_daemon(Server, UpdatedOnlineUsers);
 		
