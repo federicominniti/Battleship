@@ -78,7 +78,7 @@ random_opponent_daemon(Server, User) ->
 battleship_daemon(Server, RandomOpponentPid, OnlineUsers) ->
 	receive
     	{From, add} ->
-			UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
+		UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
       	  	send_all(UpdatedOnlineUsers),
       	  	io:format("New user available: ~s\n", [From]),
       	  	io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
@@ -92,9 +92,9 @@ battleship_daemon(Server, RandomOpponentPid, OnlineUsers) ->
 			battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
 		
     	{From, remove} ->
-			RandomOpponentPid ! {From, stop_search},
+		RandomOpponentPid ! {From, stop_search},
       	  	UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
-      	  	send_all(UpdatedOnlineUsers),
+      	 	send_all(UpdatedOnlineUsers),
      	   	update_all(UpdatedOnlineUsers, From),
      	   	io:format("~s is now offline\n", [From]),
     		io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
@@ -104,7 +104,7 @@ battleship_daemon(Server, RandomOpponentPid, OnlineUsers) ->
      	   	ok;
 			
     	_ -> 
-			battleship_daemon(Server, RandomOpponentPid, OnlineUsers)
+		battleship_daemon(Server, RandomOpponentPid, OnlineUsers)
 	end.
 
 
@@ -123,10 +123,10 @@ send_all([], _) -> ok;
 % We discriminates the two cases because in the first case we pass a list and in the second case we pass a single value
 send_all([First|Others], Data) ->
   	if
-    	(is_list(Data)) ->
-      	  	First ! jsx:encode(#{<<"type">> => <<"updated_online_users">>, <<"data">> => Data});
-    	true ->
-      	  	First ! jsx:encode(#{<<"type">> => <<"remove_user_requests">>, <<"data">> => Data})
+    		(is_list(Data)) ->
+      	  		First ! jsx:encode(#{<<"type">> => <<"updated_online_users">>, <<"data">> => Data});
+    		true ->
+      	  		First ! jsx:encode(#{<<"type">> => <<"remove_user_requests">>, <<"data">> => Data})
   	end,
   	send_all(Others, Data).
   
