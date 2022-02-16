@@ -1,7 +1,5 @@
 <%@ page import="it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="it.unipi.dii.inginf.dsmt.battleship.intefaces.BattleshipRemote" %>
-<%@ page import="javax.ejb.EJB" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>

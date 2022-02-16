@@ -18,8 +18,7 @@ public class Endgame extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-        //TOGLIERE ALLA FINE
+
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -27,8 +26,12 @@ public class Endgame extends HttpServlet {
 
         HttpSession session = request.getSession();
         UserDTO user = (UserDTO) session.getAttribute("loggedUser");
+        if (session.getAttribute("opponentUsername") == null){
+
+            response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
+            return;
+        }
         if (request.getParameter("result") != null) {
-            System.out.println("qui");
             if (request.getParameter("result").equals("win")) {
                 user.setGameWins(user.getGameWins() + 1);
                 user.setGameLose(user.getGameLose() - 1);
@@ -41,6 +44,7 @@ public class Endgame extends HttpServlet {
         List<UserDTO> ranking = battleshipRemote.rankingUsersJPA(10);
         session.setAttribute("ranking", ranking);
         session.setAttribute("loggedUser", user);
+        session.removeAttribute("opponentUsername");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/pages/result.jsp");
         dispatcher.include(request, response);
     }

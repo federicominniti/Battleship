@@ -12,6 +12,7 @@
 <%
     UserDTO loggedUser = (UserDTO) session.getAttribute("loggedUser");
     String  opponent = (String) request.getAttribute("opponentUsername");
+    session.setAttribute("opponentUsername", opponent);
     String loggedUsername = loggedUser.getUsername();
 %>
     <script>

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(filterName = "getRequestFilter", urlPatterns = {"/pages/result.jsp", "/access", "/pages/game.jsp"})
+@WebFilter(filterName = "getRequestFilter", urlPatterns = {"/pages/result.jsp", "/access", "/pages/endgame", "/pages/game.jsp", "/pages/game"})
 public class getRequestFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
@@ -20,8 +20,7 @@ public class getRequestFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String method = request.getMethod();
-
-        if (method.equals("POST") && request.getParameter("result") != null) {
+        if (method.equals("POST")) {
             filterChain.doFilter(request, response);
         } else {
             response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");

@@ -25,8 +25,6 @@ public class Game extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-        //TOGLIERE ALLA FINE
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -34,7 +32,8 @@ public class Game extends HttpServlet {
         String opponent = request.getParameter("opponentUsername");
         HttpSession session = request.getSession();
         UserDTO user = (UserDTO) session.getAttribute("loggedUser");
-        if (opponent == null) {
+        if (opponent == null || session.getAttribute("opponentUsername") != null) {
+            session.removeAttribute("opponentUsername");
             response.sendRedirect(request.getContextPath() + "/pages/homepage.jsp");
         } else {
             user.setGameLose(user.getGameLose() + 1);
@@ -43,6 +42,5 @@ public class Game extends HttpServlet {
             request.setAttribute("opponentUsername", opponent);
             dispatcher.include(request, response);
         }
-        // response.sendRedirect(request.getContextPath() + "/pages/game.jsp");
     }
 }

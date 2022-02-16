@@ -16,7 +16,7 @@ if (!("WebSocket" in window)) {
 }
 
 function initWebSocket(username) {
-    webSocket = new WebSocket("ws://172.18.0.47:8090/ws/battleship");
+    webSocket = new WebSocket("ws://localhost:8090/ws/battleship");
     webSocket.onopen = function (event) {
         //if(numReloads == 0) {
             console.log('Connected with the messages server');
