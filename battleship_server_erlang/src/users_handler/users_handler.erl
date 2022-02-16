@@ -29,13 +29,13 @@ server_loop(BattleShipPid, RandomOpponentPid) ->
 			BattleShipPid ! {From, user_in_game},
 			server_loop(BattleShipPid, RandomOpponentPid);
 			
-    	{From, stop} ->
-      		BattleShipPid ! {self(), stop},
+    		{From, stop} ->
+      			BattleShipPid ! {self(), stop},
 			RandomOpponentPid ! {self(), stop},
-      		From ! {ok};
+      			From ! {ok};
 			
-    	_ ->  
-      		server_loop(BattleShipPid, RandomOpponentPid)
+    		_ ->  
+      			server_loop(BattleShipPid, RandomOpponentPid)
   	end.
 
 % Random user research: 
@@ -65,8 +65,8 @@ random_opponent_daemon(Server, User) ->
 					NewUser = User
 			end,
 			random_opponent_daemon(Server, NewUser);
-	    {Server, stop} ->
-	    	ok
+	    	{Server, stop} ->
+	    		ok
 	end.
 
 % Manipulation of online users. We have 3 types of interactions:
@@ -77,12 +77,12 @@ random_opponent_daemon(Server, User) ->
 %					the request of the user that started a game
 battleship_daemon(Server, RandomOpponentPid, OnlineUsers) ->
 	receive
-    	{From, add} ->
-		UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
-      	  	send_all(UpdatedOnlineUsers),
-      	  	io:format("New user available: ~s\n", [From]),
-      	  	io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
-      	  	battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
+    		{From, add} ->
+			UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
+      	  		send_all(UpdatedOnlineUsers),
+      	  		io:format("New user available: ~s\n", [From]),
+      	  		io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
+      	  		battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
 	  
 		{From, user_in_game} ->
 			UpdatedOnlineUsers = maps:put(From, in_game, OnlineUsers),
@@ -91,20 +91,20 @@ battleship_daemon(Server, RandomOpponentPid, OnlineUsers) ->
 			io:format("~s starts a game\n", [From]),
 			battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
 		
-    	{From, remove} ->
-		RandomOpponentPid ! {From, stop_search},
-      	  	UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
-      	 	send_all(UpdatedOnlineUsers),
-     	   	update_all(UpdatedOnlineUsers, From),
-     	   	io:format("~s is now offline\n", [From]),
-    		io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
-    		battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
+    		{From, remove} ->
+			RandomOpponentPid ! {From, stop_search},
+      	  		UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
+      	 		send_all(UpdatedOnlineUsers),
+     	   		update_all(UpdatedOnlineUsers, From),
+     	   		io:format("~s is now offline\n", [From]),
+    			io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
+    			battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
 			
-    	{Server, stop} ->
-     	   	ok;
+    		{Server, stop} ->
+     	   		ok;
 			
-    	_ -> 
-		battleship_daemon(Server, RandomOpponentPid, OnlineUsers)
+    		_ -> 
+			battleship_daemon(Server, RandomOpponentPid, OnlineUsers)
 	end.
 
 
