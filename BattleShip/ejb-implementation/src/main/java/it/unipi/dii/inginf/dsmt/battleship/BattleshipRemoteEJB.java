@@ -24,6 +24,12 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     @PersistenceContext
     private EntityManager entityManager;
 
+    /**
+     * Utility function to convert a User into a UserDTO.
+     * note: we do not set the password due to security reason.
+     * @param user
+     * @return
+     */
     private UserDTO convertToDTO(User user) {
         UserDTO dto = new UserDTO();
         dto.setUsername(user.getUsername());
@@ -36,7 +42,8 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     }
 
     /**
-     * Ranks registered users in descending order of victories/defeats ratio.
+     * Ranks registered users in descending order by the number of victories,
+     * showing also is victory ratio.
      * @param limit the limit of users to return
      * @return a list of users
      */
@@ -62,7 +69,7 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     }
 
     /**
-     * Retrieves a user
+     * Retrieves a user by Usename
      * @param username the username of the user to retrieve
      * @return null if the there isn't a user associated with the username, a User otherwise
      */
@@ -76,7 +83,7 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     }
 
     /**
-     * Registers a user
+     * Save a new user into the DataBase
      * @param dto the user to be saved
      */
     @Override
@@ -113,7 +120,7 @@ public class BattleshipRemoteEJB implements BattleshipRemote {
     }
 
     /**
-     * Registers the result of a game for a user. Can be either a win or a loss
+     * Update the number of games win and lose by the users.
      * @param dto the user involved in the operation
      */
     @Override

@@ -5,6 +5,9 @@ import it.unipi.dii.inginf.dsmt.battleship.dto.UserDTO;
 import javax.ejb.Remote;
 import java.util.List;
 
+/**
+ * Interface to implement the concept of encapsulation
+ */
 @Remote
 public interface BattleshipRemote {
     public List<UserDTO> rankingUsersJPA(int limit);

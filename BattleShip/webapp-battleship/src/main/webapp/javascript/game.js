@@ -1,3 +1,6 @@
+/**
+    class to handle the ships' game logic
+ */
 class Ship {
     constructor(id, length) {
         this.id = id;
@@ -11,6 +14,9 @@ class Ship {
     }
 }
 
+/**
+    class to handle the game logic and status
+ */
 class Game {
 
     constructor(turnTime) {
@@ -21,6 +27,7 @@ class Game {
         this.myRandom = 0;
         this.receivedRandom = 0;
         this.timeOut = null;
+        // this.maxIdle = null;         possible control on special case where the opponent crash while loading the game
     }
 
     addShip(ship) {
@@ -38,7 +45,7 @@ class Game {
                 let shipSunk = this.ships[i].checkSunk();
                 if (shipSunk){
                     let len = this.ships[i].type;
-                    this.ships.splice(this.ships[i].id, 1);
+                    this.ships.splice(i, 1);
                     return len;
                 }
                 else

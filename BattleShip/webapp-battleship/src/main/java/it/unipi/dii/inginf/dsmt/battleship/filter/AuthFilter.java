@@ -11,9 +11,7 @@ import java.io.PrintWriter;
 @WebFilter(filterName = "AuthFilter", urlPatterns = {"/pages/*"})
 public class AuthFilter implements Filter {
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
     /**
      * When navigating in pages that are not the "index.jsp", checks if the user is logged in.
@@ -25,7 +23,6 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
 
-        // System.out.println("auth filter");
         if (session.getAttribute("loggedUser") == null) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {

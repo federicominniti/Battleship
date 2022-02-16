@@ -1,9 +1,9 @@
 //WEBSOCKET INITIALIZATION
-
 initWebSocket(username);
 
-
-//@Override from webSocket.js
+/**
+    handle the message received by the server or other users
+ */
 webSocket.onmessage = function (event) {
     let jsonString = JSON.parse(event.data);
     let sender = jsonString.sender;
@@ -12,7 +12,6 @@ webSocket.onmessage = function (event) {
     switch (jsonString.type) {
         case "battleship_request":
             container = document.getElementById("received-request");
-            console.log("request arrived");
             if (document.getElementById(sender) !== null)
                 break;
             container.appendChild(battleRequestCard(sender))
@@ -112,7 +111,6 @@ function acceptRequest (opponent) {
     setTimeout(function () { startBattleship(opponent); }, 800);
 }
 
-
 function startBattleship(opponent){
     closeWebSocket();
     let hiddenForm = document.createElement("form");
@@ -143,6 +141,9 @@ function refreshPage(){
     }
 }
 
+/**
+    save the game request in case of refresh of the page
+ */
 function saveDataAndQuit() {
     let users = "";
     let divUsers = document.getElementsByClassName("game-request");
@@ -158,6 +159,9 @@ function saveDataAndQuit() {
     closeWebSocket();
 }
 
+/**
+    Ask the WebSocket Server (erlang) to find a random opponent
+ */
 function searchRandomOpponent(){
     sendWebSocket(new Message('random_opponent', null, username, null));
     let overlay = document.getElementById("overlay");

@@ -1,24 +1,31 @@
-//-------------------------WEB SOCKET -----------------------------
 
+/**
+    Registration to the WebSocket on the erlang side.
+ */
 initWebSocket(loggedUser);
 waitForSocketConnection(webSocket,function() {
     sendWebSocket(new Message("opponent_registration", opponent, loggedUser, null));
 });
 
+/**
+    handle the case of quitting during the game, by let the other user win.
+ */
 window.onunload = function () {
     surrender();
 }
-// RECEIVE
+
+/**
+    handle the message received, making different operation based on the
+    type of the message.
+ */
 webSocket.onmessage = function (event) {
     let jsonString = JSON.parse(event.data);
-    //let sender = jsonString.sender;
-
     if (jsonString.type === "chat_message") {
-        acceptMessage(jsonString.data);
+        createMessageElem(jsonString.data, false);
     } else {
         let coordinate;
         switch (jsonString.type) {
-            case "ready":
+            case "ready":           // the opponent is ready to play
                 game.receivedRandom = parseInt(jsonString.data);
                 if (game.myRandom !== 0){
                     if (parseInt(jsonString.data) < game.myRandom)
@@ -27,7 +34,7 @@ webSocket.onmessage = function (event) {
                         updateStatus("idle");
                 }
                 break;
-            case "shoot":
+            case "shoot":   // the opponent has shot at some coordinates
                 coordinate = jsonString.data.split("-");
                 let targetCellId = createId("your", coordinate[0], coordinate[1]);
                 let shipId = document.getElementById(targetCellId).textContent;
@@ -39,7 +46,6 @@ webSocket.onmessage = function (event) {
                 } else {    // hit or sunk
                     hitCell("your", coordinate[0], coordinate[1]);
                     let result = game.checkShoot(shipId);
-                    console.log("game result: " + result);
                     if (typeof result === "string") {
                         message = new Message("hit", jsonString.data, loggedUser, opponent);
                     } else if (typeof result === "number") {
@@ -52,17 +58,17 @@ webSocket.onmessage = function (event) {
                 }
                 updateStatus("play");
                 break;
-            case "miss":
+            case "miss":    // the previous shot miss the ship
                 coordinate = jsonString.data.split("-");
                 missCell("enemy", coordinate[0], coordinate[1]);
                 updateStatus("idle")
                 break;
-            case "hit":
+            case "hit":     // the previous shot hit the ship
                 coordinate = jsonString.data.split("-");
                 hitCell("enemy", coordinate[0], coordinate[1]);
                 updateStatus("idle");
                 break;
-            case "sunk":
+            case "sunk":    // the previous shot hit the ship and sunk it
                 let info = jsonString.data.split("_");
                 document.getElementById("enemy".concat(info[1])).textContent--;
                 coordinate = info[0].split("-");
@@ -70,15 +76,19 @@ webSocket.onmessage = function (event) {
                 updateStatus("idle");
                 checkEndGame("win");
                 break;
-            case "timeout":
+            case "timeout": // the opponent expire the time of his turn
                 updateStatus("play");
                 break;
-            case "surrend":
+            case "surrend": // the opponent user surrend
                 enemySurrender();
                 break;
         }
     }
 }
+/**
+    send a message to the opponent that the user is ready and
+    decide if it's his turn or not.
+*/
 
 function sendReady() {
     document.getElementById("ready").disabled = true;
@@ -96,7 +106,53 @@ function sendReady() {
         updateStatus("idle");
 }
 
+function enemySurrender() {
+    for (let i = 2; i <= 5; i++) {
+        document.getElementById("enemy".concat(i)).textContent = 0;
+    }
+    checkEndGame("win");
+}
+
+function surrender() {
+    for (let i = 2; i <= 5; i++) {
+        document.getElementById("place".concat(i)).textContent = 0;
+    }
+    let message = new Message("surrend", null, loggedUser, opponent);
+    sendWebSocket(message);
+    checkEndGame("lose");
+}
+
+function checkEndGame(status) {
+    let counter;
+    for (let i = 2; i <= 5; i++) {
+        if (status === "lose")
+            counter = document.getElementById("place".concat(i)).textContent;
+        else
+            counter = document.getElementById("enemy".concat(i)).textContent;
+        if (parseInt(counter) !== 0)
+            return;
+    }
+    closeWebSocket();
+    let hiddenForm = document.createElement("form");
+    hiddenForm.setAttribute('method',"post");
+    hiddenForm.setAttribute('action',"endgame");
+
+    let result = document.createElement("input");
+    result.setAttribute('type',"text");
+    result.setAttribute('name', "result");
+    result.setAttribute('value', status);
+
+    hiddenForm.appendChild(result);
+    hiddenForm.style.visibility = "hidden";
+    document.body.appendChild(hiddenForm);
+    hiddenForm.submit();
+}
+
 // ---------------------------------GAME CONTROLLER-------------------
+/**
+    the following function are used to handle the logic of the game, such as change the color of the cells,
+    set the timer, ecc.
+ */
 function createGrid(owner, target) {
     let grid = document.getElementById(target);
     for (let i = 0; i < 11; i++) {
@@ -158,7 +214,6 @@ function controlPlacement(len, direction, target) {
             "', '" + direction + "', '" + len + "')");
     }
 }
-
 
 function cellInteraction(id) {
     switch (game.gameStatus){
@@ -232,7 +287,6 @@ function undoSelect(id) {
     enableTable();
 }
 
-
 function chooseShip(id, direction, len) {
     //change navy
     let coordinatesArray = [];
@@ -279,49 +333,6 @@ function chooseShip(id, direction, len) {
     checkReady()
 }
 
-function enemySurrender() {
-    for (let i = 2; i <= 5; i++) {
-        document.getElementById("enemy".concat(i)).textContent = 0;
-    }
-    checkEndGame("win");
-}
-
-function surrender() {
-    for (let i = 2; i <= 5; i++) {
-        document.getElementById("place".concat(i)).textContent = 0;
-    }
-    let message = new Message("surrend", null, loggedUser, opponent);
-    sendWebSocket(message);
-    checkEndGame("lose");
-}
-
-function checkEndGame(status) {
-    let counter;
-    for (let i = 2; i <= 5; i++) {
-        if (status === "lose")
-            counter = document.getElementById("place".concat(i)).textContent;
-        else
-            counter = document.getElementById("enemy".concat(i)).textContent;
-        if (parseInt(counter) !== 0)
-            return;
-    }
-    console.log("END GAME");
-    closeWebSocket();
-    let hiddenForm = document.createElement("form");
-    hiddenForm.setAttribute('method',"post");
-    hiddenForm.setAttribute('action',"endgame");
-
-    let result = document.createElement("input");
-    result.setAttribute('type',"text");
-    result.setAttribute('name', "result");
-    result.setAttribute('value', status);
-
-    hiddenForm.appendChild(result);
-    hiddenForm.style.visibility = "hidden";
-    document.body.appendChild(hiddenForm);
-    hiddenForm.submit();
-}
-
 function startTimer () {
     let time = document.getElementById("timer");
     time.textContent = game.turnTime;
@@ -341,8 +352,8 @@ function stopTimer(time) {
     time.textContent = "";
     clearInterval(game.timeOut);
 }
+
 // -------------------------UTILITY------------------------
-// change the status of a cell
 function hitCell(grid, row, col) {
     let cellId = createId(grid, row, col);
     let cell = document.getElementById(cellId);
@@ -357,12 +368,10 @@ function missCell(grid, row, col) {
     cell.setAttribute("onclick", "null");
 }
 
-// convert coordinates to id
 function createId(grid, row, column) {
     return grid.concat("-", row, "-", column);
 }
 
-// remove all onclick events from the grid
 function disabledTable(grid) {
     let cells = document.getElementsByClassName("cell std");
     for (let i = 0; i < cells.length; i++) {
@@ -371,7 +380,6 @@ function disabledTable(grid) {
     }
 }
 
-// restore all onclick events od the cells in the grid
 function enableTable() {
     let cells = document.getElementsByClassName("cell std");
     for (let i = 0; i < cells.length; i++) {
@@ -381,12 +389,10 @@ function enableTable() {
     }
 }
 
-// remove the last ship insert
 function goBack() {
     let ship = game.deleteShip();
     document.getElementById("place".concat(ship.type)).textContent--;
     let cells = document.getElementsByClassName("cell");
-    console.log(cells);
     for(let i = 0; i < cells.length; i++){
         if (cells[i].textContent == ship.id && cells[i].className !== "cell white"){
             cells[i].textContent = "";
@@ -400,7 +406,6 @@ function goBack() {
         document.getElementById("back").disabled = true;
 }
 
-// check if the user has inserted all ships
 function checkReady() {
     for (let i = 2; i <= 5; i++) {
         let num = document.getElementById("place".concat(i)).textContent;
@@ -433,11 +438,13 @@ function updateStatus(status) {
             label.textContent = "YOUR TURN";
             enableTable();
             disabledTable("your");
+            // clearTimeout(game.maxIdle);
             startTimer();
             break;
         case "idle":
             label.textContent = "ENEMY TURN";
             stopTimer(document.getElementById("timer"));
+            // game.maxIdle = setTimeout(enemySurrender, 1000*120);
             disabledTable("your");
             disabledTable("enemy");
             break;

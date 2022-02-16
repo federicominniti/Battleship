@@ -1,3 +1,7 @@
+
+/**
+    Send a chat-message to the opponent through the WebSocket
+ */
 function sendMessage() {
 
     let input = document.getElementById("text");
@@ -7,21 +11,16 @@ function sendMessage() {
     if (msg === "")
         return;
 
-    // TODO erlang stuff to add (why sleep?)
     btn.disabled = true;
     let msgForErlang = new Message("chat_message", msg, loggedUser , opponent);
-    //sleep(500).then(r => {
-        sendWebSocket(msgForErlang);
-        createMessageElem(msg, true);
-        btn.disabled = false;
-    //});
+    sendWebSocket(msgForErlang);
+    createMessageElem(msg, true);
     input.value = "";
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
+/**
+    build the div of the message making difference between user message and opponent message
+ */
 function createMessageElem(message, isMsgMine) {
     let msgDiv = document.createElement("div");
     if (isMsgMine)
@@ -31,10 +30,6 @@ function createMessageElem(message, isMsgMine) {
 
     msgDiv.textContent = message;
     let container = document.getElementById("list-message");
-    //container.insertBefore(msgDiv, container.lastChild);
     container.appendChild(msgDiv);
 }
 
-function acceptMessage(message) {
-    createMessageElem(message, false);
-}
