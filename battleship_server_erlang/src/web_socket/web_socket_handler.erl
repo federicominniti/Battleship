@@ -38,33 +38,36 @@ websocket_handle ({text, Text}, State) ->
   	io:format("Frame received: ~p\n", [Text]),
   	% JSX (it use binary data):
   	%		<< ... >>: cast a bit string into an atom
-  	% 	decode: convert an utf8 encoded binary json text to an erlang term
+  	% 		decode: convert an utf8 encoded binary json text to an erlang term
   	%		encode
   	TextAsMap = jsx:decode(Text, [return_maps]),
   	TypeOfMessage = erlang:binary_to_atom(maps:get(<<"type">>, TextAsMap)),
   	SenderName = erlang:binary_to_atom(maps:get(<<"sender">>, TextAsMap)),
   	case TypeOfMessage of
-    	user_online ->
-      	  	SenderPID = whereis(SenderName),
-      		if
-        		SenderPID =/= undefined ->
-          			ResponseAsText = jsx:encode(#{<<"type">> => <<"logged_sender_error">>}),
-          		  	NewState = State,
-          		  	self() ! ResponseAsText;
-        		true ->
-          		  	register(erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap)), self()),
+    		user_online ->
+      	  		SenderPID = whereis(SenderName),
+      			if
+        			SenderPID =/= undefined ->
+          				ResponseAsText = jsx:encode(#{<<"type">> => <<"logged_sender_error">>}),
+          		  		NewState = State,
+          		  		self() ! ResponseAsText;
+        			true ->
+          		  		register(erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap)), self()),
 		  		  	NameProcess = erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap)),
 		  		  	online_users ! {NameProcess, {update_online_user, add}},
 		  		  	NewState = {waiting_opponent, SenderName}
-      		end;
-    	opponent_registration ->
+      			end;
+		
+    		opponent_registration ->
 			online_users ! {SenderName, {update_online_user, user_in_game}},
-      		NewState = {opponent_user, erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap))};
+      			NewState = {opponent_user, erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap))};
+		
 		random_opponent ->
 			online_users ! {SenderName, search_random_opponent},
 			NewState = {search_random_opponent, SenderName};
-		_ -> % types of message [battleship_request, battleship_accepted, decline_battle_request, chat_message, ready, shoot, miss, hit, sunk]
-      	  	Receiver = erlang:binary_to_atom(maps:get(<<"receiver">>, TextAsMap)),
+		
+		_ -> % types of message [battleship_request, battleship_accepted, decline_battle_request, chat_message, ready, shoot, miss, hit, sunk, surrender, timeout]
+      	  		Receiver = erlang:binary_to_atom(maps:get(<<"receiver">>, TextAsMap)),
 			NewState = State,
 			try Receiver ! Text of
 				_ -> io:format("Frame sent\n")
@@ -86,10 +89,10 @@ terminate (TerminateReason, _Req, {opponent_user, OpponentUsername}) ->
   	io:format("Terminate reason: ~p\n", [TerminateReason]),
   	OpponentPID = whereis(OpponentUsername),
   	if
-    	OpponentPID =/= undefined -> 
-      		OpponentPID ! jsx:encode(#{<<"type">> => <<"opponent_disconnected">>});
-    	true ->
-      	  	ok
+    		OpponentPID =/= undefined -> 
+      			OpponentPID ! jsx:encode(#{<<"type">> => <<"opponent_disconnected">>});
+    		true ->
+      	  		ok
   	end;
   
 terminate (TerminateReason, _Req, {search_random_opponent, User}) ->
