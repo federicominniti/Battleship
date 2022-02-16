@@ -29,13 +29,13 @@ server_loop(BattleShipPid, RandomOpponentPid) ->
 			BattleShipPid ! {From, user_in_game},
 			server_loop(BattleShipPid, RandomOpponentPid);
 			
-    	{From, stop} ->
-      		BattleShipPid ! {self(), stop},
+    		{From, stop} ->
+      			BattleShipPid ! {self(), stop},
 			RandomOpponentPid ! {self(), stop},
-      		From ! {ok};
+      			From ! {ok};
 			
-    	_ ->  
-      		server_loop(BattleShipPid, RandomOpponentPid)
+    		_ ->  
+      			server_loop(BattleShipPid, RandomOpponentPid)
   	end.
 
 % Random user research: 
@@ -62,12 +62,11 @@ random_opponent_daemon(Server, User) ->
 				(From == User) ->
 					NewUser = null;
 				true -> 
-					io:format("Error on stop random users search\n"),
 					NewUser = User
 			end,
 			random_opponent_daemon(Server, NewUser);
-	    {Server, stop} ->
-	    	ok
+	    	{Server, stop} ->
+	    		ok
 	end.
 
 % Manipulation of online users. We have 3 types of interactions:
@@ -78,12 +77,12 @@ random_opponent_daemon(Server, User) ->
 %					the request of the user that started a game
 battleship_daemon(Server, RandomOpponentPid, OnlineUsers) ->
 	receive
-    	{From, add} ->
+    		{From, add} ->
 			UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
-      	  	send_all(UpdatedOnlineUsers),
-      	  	io:format("New user available: ~s\n", [From]),
-      	  	io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
-      	  	battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
+      	  		send_all(UpdatedOnlineUsers),
+      	  		io:format("New user available: ~s\n", [From]),
+      	  		io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
+      	  		battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
 	  
 		{From, user_in_game} ->
 			UpdatedOnlineUsers = maps:put(From, in_game, OnlineUsers),
@@ -92,19 +91,19 @@ battleship_daemon(Server, RandomOpponentPid, OnlineUsers) ->
 			io:format("~s starts a game\n", [From]),
 			battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
 		
-    	{From, remove} ->
+    		{From, remove} ->
 			RandomOpponentPid ! {From, stop_search},
-      	  	UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
-      	  	send_all(UpdatedOnlineUsers),
-     	   	update_all(UpdatedOnlineUsers, From),
-     	   	io:format("~s is now offline\n", [From]),
-    		io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
-    		battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
+      	  		UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
+      	 		send_all(UpdatedOnlineUsers),
+     	   		update_all(UpdatedOnlineUsers, From),
+     	   		io:format("~s is now offline\n", [From]),
+    			io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
+    			battleship_daemon(Server, RandomOpponentPid, UpdatedOnlineUsers);
 			
-    	{Server, stop} ->
-     	   	ok;
+    		{Server, stop} ->
+     	   		ok;
 			
-    	_ -> 
+    		_ -> 
 			battleship_daemon(Server, RandomOpponentPid, OnlineUsers)
 	end.
 
@@ -124,10 +123,10 @@ send_all([], _) -> ok;
 % We discriminates the two cases because in the first case we pass a list and in the second case we pass a single value
 send_all([First|Others], Data) ->
   	if
-    	(is_list(Data)) ->
-      	  	First ! jsx:encode(#{<<"type">> => <<"updated_online_users">>, <<"data">> => Data});
-    	true ->
-      	  	First ! jsx:encode(#{<<"type">> => <<"remove_user_requests">>, <<"data">> => Data})
+    		(is_list(Data)) ->
+      	  		First ! jsx:encode(#{<<"type">> => <<"updated_online_users">>, <<"data">> => Data});
+    		true ->
+      	  		First ! jsx:encode(#{<<"type">> => <<"remove_user_requests">>, <<"data">> => Data})
   	end,
   	send_all(Others, Data).
   
