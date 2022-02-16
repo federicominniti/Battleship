@@ -9,35 +9,35 @@
 -module(users_handler).
 -author("group_mbds").
 
-%% API
 -export([init_server/0]).
 
-% function to start the server
 init_server() ->
-  Server = self(),
-  BattleShipPid = spawn( fun() -> battleship_daemon(Server, #{}) end ),
-  RandomOpponentPid = spawn( fun() -> random_opponent_daemon(null) end ),
-  server_loop(BattleShipPid, RandomOpponentPid).
+	Server = self(),
+  	BattleShipPid = spawn( fun() -> battleship_daemon(Server, #{}) end ),
+  	RandomOpponentPid = spawn( fun() -> random_opponent_daemon(null) end ),
+  	server_loop(BattleShipPid, RandomOpponentPid).
 
-% server node loop
+% It handles mainly 2 types of interaction: online users' manipulation and search a random user
 server_loop(BattleShipPid, RandomOpponentPid) ->
-  	receive
+	receive
 		{From, {update_online_user, Operation} } ->
 			BattleShipPid ! {From, Operation},
 			server_loop(BattleShipPid, RandomOpponentPid);
-	  
 		{From, search_random_opponent} ->
 			RandomOpponentPid ! {From, search_random_opponent},
 			server_loop(BattleShipPid, RandomOpponentPid);
-		
-    	{From, {stop} } ->
+    	{From, stop} ->
       		BattleShipPid ! {self(), stop},
+			RandomOpponentPid ! {self(), stop},
       		From ! {ok};
-    	_ ->  %any out-of-domain [interaction, stop] message is skipped
+    	_ ->  
       		server_loop(BattleShipPid, RandomOpponentPid)
   	end.
-  
-random_opponent_daemon(User) -> %%MANDARE MESS A CLIENT SINGOLI ANCHE
+
+% Random user research: 
+% 	1st user is saved and wait for an opponent 
+% 	2nd user is matched with the previous user and the demon send the needed message to allow users to start the game  
+random_opponent_daemon(User) ->
 	receive
 		{From, search_random_opponent} ->
 			if
@@ -45,7 +45,6 @@ random_opponent_daemon(User) -> %%MANDARE MESS A CLIENT SINGOLI ANCHE
 					NewUser = From,
 					random_opponent_daemon(NewUser);
 				true -> 
-					%<<"sender">> => erlang:atom_to_binary(From)
 					MessageUser = jsx:encode(#{<<"type">> => <<"battleship_accepted">>, <<"sender">> => From}),
 					User ! MessageUser,
 					MessageFrom = jsx:encode(#{<<"type">> => <<"battleship_accepted">>, <<"sender">> => User}),
@@ -55,37 +54,43 @@ random_opponent_daemon(User) -> %%MANDARE MESS A CLIENT SINGOLI ANCHE
 			end
 	end.
 
-%battleship daemon waits connection from
+% Manipulation of online users. We have 3 types of interactions:
+%	1 add: a new user is available to send and receive game request -> it is registered in the map and a message is sent to the others 
+%		   players to inform them. The initial state is 'in lobby'
+%	2 user_in_game: a user start a game with another -> the daemon change the state of the two processes individually and send an update 
+%					to the others processes to inform them that it is not available to receive requests and another massage to remove all 
+%					the request of the user that started a game
 battleship_daemon(Server, OnlineUsers) ->
-  receive
-    {From, add} ->
-      UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
-      send_all(UpdatedOnlineUsers),  %% publish the updated version of the available users where 'From' has been added
-      io:format("New user available: ~s ", [From]),
-      io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
-      battleship_daemon(Server, UpdatedOnlineUsers);
+	receive
+    	{From, add} ->
+			UpdatedOnlineUsers = maps:put(From, in_lobby, OnlineUsers),
+      	  	send_all(UpdatedOnlineUsers),
+      	  	io:format("New user available: ~s\n", [From]),
+      	  	io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
+      	  	battleship_daemon(Server, UpdatedOnlineUsers);
 	  
-	{From, user_in_game} ->
-		UpdatedOnlineUsers = maps:put(From, in_game, OnlineUsers),
-		send_all(UpdatedOnlineUsers),
-		update_all(UpdatedOnlineUsers, From),
-		io:format("~s starts a game", [From]),
-		battleship_daemon(Server, UpdatedOnlineUsers);
+		{From, user_in_game} ->
+			UpdatedOnlineUsers = maps:put(From, in_game, OnlineUsers),
+			send_all(UpdatedOnlineUsers),
+			update_all(UpdatedOnlineUsers, From),
+			io:format("~s starts a game\n", [From]),
+			battleship_daemon(Server, UpdatedOnlineUsers);
 		
-    {From, remove} ->
-      UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
-      send_all(UpdatedOnlineUsers),  %% publish the updated version of the available users where 'From' has been removed
-      update_all(UpdatedOnlineUsers, From),  %% all game requests coming from this user are deleted
-      io:format("~s is now offline\n", [From]),
-      io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
-      battleship_daemon(Server, UpdatedOnlineUsers);
-    {Server, stop} ->
-      ok;
-    _ -> battleship_daemon(Server, OnlineUsers)  %any out-of-domain [add, remove, stop] message is skipped
-  end.
+    	{From, remove} ->
+      	  	UpdatedOnlineUsers = maps:remove(From, OnlineUsers),
+      	  	send_all(UpdatedOnlineUsers),
+     	   	update_all(UpdatedOnlineUsers, From),
+     	   	io:format("~s is now offline\n", [From]),
+    		io:format("Online users: ~w ~n", [UpdatedOnlineUsers]),
+    		battleship_daemon(Server, UpdatedOnlineUsers);
+    	{Server, stop} ->
+     	   	ok;
+    	_ -> 
+			battleship_daemon(Server, OnlineUsers)
+	end.
 
 
-% It sends a message to all clients ready to start a new match
+% Function to extract from the map the list of the 'in lobby' users. After we call the send messages function to update the online users
 send_all(Map) ->
 	Pred = fun(K,V) -> (V =:= in_lobby) end,
 	Filtered = maps:filter(Pred, Map),
@@ -94,15 +99,20 @@ send_all(Map) ->
 
 send_all([], _) -> ok;
 
+% 2 types of messages to send to the online users:
+%	updated_online_users: it is used to send the online users' list
+%	remove_user_requests: it is used to remove requests of a user that goes offline or a user that started a game
+% We discriminates the two cases because in the first case we pass a list and in the second case we pass a single value
 send_all([First|Others], Data) ->
-  if
-    (is_list(Data)) ->  %% if it is a list, it means that the list of online users has been updated
-      First ! jsx:encode(#{<<"type">> => <<"updated_online_users">>, <<"data">> => Data});
-    true -> %% otherwise, it is the username of a user who is no longer online
-      First ! jsx:encode(#{<<"type">> => <<"remove_user_requests">>, <<"data">> => Data})
-  end,
-  send_all(Others, Data).
+  	if
+    	(is_list(Data)) ->
+      	  	First ! jsx:encode(#{<<"type">> => <<"updated_online_users">>, <<"data">> => Data});
+    	true ->
+      	  	First ! jsx:encode(#{<<"type">> => <<"remove_user_requests">>, <<"data">> => Data})
+  	end,
+  	send_all(Others, Data).
   
+
 update_all(Map, From) ->
 	Pred = fun(K,V) -> (V =:= in_lobby) end,
 	Filtered = maps:filter(Pred, Map),
