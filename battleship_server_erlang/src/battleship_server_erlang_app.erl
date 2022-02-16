@@ -11,7 +11,7 @@
 
 start(_StartType, _StartArgs) ->
     Dispatch = cowboy_router:compile([
-        {'_', [{"/ws/battleship", web_socket_handler, {} }]} %% {} initial state is an empty tuple
+        {'_', [{"/ws/battleship", web_socket_handler, {} }]}
     ]),
     {ok, _} = cowboy:start_clear(http_listener,
         [{port, 8090}],
@@ -23,7 +23,7 @@ start(_StartType, _StartArgs) ->
     battleship_server_erlang_sup:start_link().
 
 stop(_State) ->
-    online_users ! {self(), {stop}},
+    online_users ! {self(), stop},
     ok.
 
 %% internal functions
