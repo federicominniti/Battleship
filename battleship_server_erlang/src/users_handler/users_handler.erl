@@ -62,7 +62,6 @@ random_opponent_daemon(Server, User) ->
 				(From == User) ->
 					NewUser = null;
 				true -> 
-					io:format("Error on stop random users search\n"),
 					NewUser = User
 			end,
 			random_opponent_daemon(Server, NewUser);
