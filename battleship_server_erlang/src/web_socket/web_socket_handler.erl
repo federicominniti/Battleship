@@ -55,7 +55,7 @@ websocket_handle ({text, Text}, State) ->
           		  	register(erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap)), self()),
 		  		  	NameProcess = erlang:binary_to_atom(maps:get(<<"data">>, TextAsMap)),
 		  		  	online_users ! {NameProcess, {update_online_user, add}},
-		  		  	NewState = {waiting_opponent, State}
+		  		  	NewState = {waiting_opponent, SenderName}
       		end;
     	opponent_registration ->
 			online_users ! {SenderName, {update_online_user, user_in_game}},
@@ -97,10 +97,8 @@ terminate (TerminateReason, _Req, {search_random_opponent, User}) ->
   	io:format("~s found an opponent\n", [User]),
   	io:format("Terminate reason: ~p\n", [TerminateReason]);
   
-terminate (TerminateReason, _Req, {waiting_opponent, State}) ->
-  	ProcessInfo = process_info(self(), registered_name),
-  	NameProcess = element(2, ProcessInfo),
-  	online_users ! {NameProcess, {update_online_user, remove}},
+terminate (TerminateReason, _Req, {waiting_opponent, User}) ->
+  	online_users ! {User, {update_online_user, remove}},
   	io:format("Terminate reason: ~p\n", [TerminateReason]);
 
 terminate (TerminateReason, _Req, {}) ->
