@@ -11,7 +11,6 @@ function sendMessage() {
     if (msg === "")
         return;
 
-    btn.disabled = true;
     let msgForErlang = new Message("chat_message", msg, loggedUser , opponent);
     sendWebSocket(msgForErlang);
     createMessageElem(msg, true);
