@@ -37,7 +37,8 @@ webSocket.onmessage = function (event) {
         case "remove_user_requests":
             container = document.getElementById("received-request");
             let request = document.getElementById(jsonString.data);
-            container.removeChild(request);
+            if(request != null)
+                container.removeChild(request);
             break;
         case "logged_sender_error":
             alert("You are logged in from another device!");
