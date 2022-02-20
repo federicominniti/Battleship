@@ -112,4 +112,3 @@ terminate (TerminateReason, _Req, {}) ->
 % The module cowboy_websocket implements Websocket as a Ranch protocol.
 % It defines a callback interface for handling Websocket connections.
 % CowBoy uses different processes for handling each client connection.
-% Documentation: https://ninenines.eu/docs/en/cowboy/2.6/manual/cowboy_websocket/
